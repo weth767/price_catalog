@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:14.3
+    container_name: webcrawler_db
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=webcrawler
+    ports:
+      - "5432:5432"
+    volumes:
+      - webcrawler:/var/lib/postgresql/data
+volumes:
+  webcrawler:
+    driver: local

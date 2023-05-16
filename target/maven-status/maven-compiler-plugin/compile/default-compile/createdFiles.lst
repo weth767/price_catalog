@@ -1,0 +1,6 @@
+com\jpsouza\webcrawler\features\crawler\services\CustomCrawlerService.class
+com\jpsouza\webcrawler\features\crawler\models\Product.class
+com\jpsouza\webcrawler\features\crawler\repositories\ProductRepository.class
+com\jpsouza\webcrawler\features\crawler\controllers\CustomCrawlerController.class
+com\jpsouza\webcrawler\features\crawler\models\CustomWebCrawler.class
+com\jpsouza\webcrawler\WebcrawlerApplication.class
