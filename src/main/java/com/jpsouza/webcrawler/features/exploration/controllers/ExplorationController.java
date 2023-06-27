@@ -20,11 +20,17 @@ public class ExplorationController {
     @PostMapping(value = "/start")
     public ResponseEntity<String> startCrawler() {
         try {
-            explorationService.startExploration(5, new HashSet<>(List.of("https://www.mercadolivre.com.br/")));
+            explorationService.startExploration(5);
             return ResponseEntity.ok("Crawler iniciado com sucesso!");
         } catch (Exception exception) {
             return ResponseEntity.ok("Crawler não foi iniciado com sucesso! Confira o log: " + exception.getMessage());
         }
+    }
+
+    @PostMapping(value = "/configure")
+    public ResponseEntity<String> configure() {
+        explorationService.configure(new HashSet<>(List.of("https://www.mercadolivre.com.br/")));
+        return ResponseEntity.ok("Urls configuradas com sucesso!");
     }
 
     @PutMapping(value = "/stop")

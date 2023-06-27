@@ -1,7 +1,6 @@
 package com.jpsouza.webcrawler.features.exploration.services;
 
 import com.jpsouza.webcrawler.features.crawler.services.Crawler4jCrawlerService;
-import com.jpsouza.webcrawler.shared.exceptions.ApplicationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +11,15 @@ import java.util.Set;
 public class ExplorationService {
     private final Crawler4jCrawlerService crawler4jCrawlerService;
 
-    public void startExploration(int crawlers, Set<String> urls) throws ApplicationException {
-        try {
-            crawler4jCrawlerService.startCrawler(crawlers, urls);
-        } catch (Exception e) {
-            throw new ApplicationException(e.getMessage(), e.getCause());
-        }
+    public void startExploration(int crawlers) throws Exception {
+        crawler4jCrawlerService.startCrawler(crawlers);
+    }
+
+    public void configure(Set<String> urls) {
+        crawler4jCrawlerService.configure(urls);
     }
 
     public void stopExploration() {
-        this.crawler4jCrawlerService.stopCrawler();
+        crawler4jCrawlerService.stopCrawler();
     }
 }
