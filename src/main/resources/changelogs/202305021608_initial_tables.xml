@@ -11,7 +11,7 @@
                              primaryKeyName="domain_pk"
                 />
             </column>
-            <column name="name" type="varchar(100)">
+            <column name="name" type="text">
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="url" type="text">
@@ -40,18 +40,12 @@
                              foreignKeyName="domain_fk"
                              deleteCascade="true"/>
             </column>
-        </createTable>
-        <createTable tableName="explore_url">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true"
-                             primaryKeyName="explore_url_pk"
-                />
-            </column>
-            <column name="url" type="text">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="explored" type="boolean" defaultValue="false">
-                <constraints nullable="false"/>
+            <column name="parent_id" type="bigint">
+                <constraints nullable="true"
+                             referencedTableName="link"
+                             referencedColumnNames="id"
+                             foreignKeyName="link_fk"
+                             deleteCascade="true"/>
             </column>
         </createTable>
     </changeSet>

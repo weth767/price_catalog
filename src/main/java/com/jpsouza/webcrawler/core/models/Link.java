@@ -1,4 +1,4 @@
-package com.jpsouza.webcrawler.features.exploration.models;
+package com.jpsouza.webcrawler.core.models;
 
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;

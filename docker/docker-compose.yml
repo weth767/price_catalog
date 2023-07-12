@@ -2,7 +2,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:14.3
-    container_name: webcrawler_db
+    container_name: postgres_db
     restart: always
     environment:
       - POSTGRES_USER=root
@@ -12,6 +12,18 @@ services:
       - "5432:5432"
     volumes:
       - webcrawler:/var/lib/postgresql/data
+      #mongo:
+      #image: mongo:6.0.7
+      #container_name: mongo_db
+      #restart: always
+      #ports:
+      # - "27017:27017"
+      #environment:
+      #MONGO_INITDB_ROOT_USERNAME: root
+      #MONGO_INITDB_ROOT_PASSWORD: root
+      #MONGO_INITDB_DATABASE: webcrawler
+      #volumes:
+      #- webcrawler:/var/lib/mongodb/data
 volumes:
   webcrawler:
     driver: local

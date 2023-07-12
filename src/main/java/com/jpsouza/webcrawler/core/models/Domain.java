@@ -1,6 +1,7 @@
-package com.jpsouza.webcrawler.features.exploration.models;
+package com.jpsouza.webcrawler.core.models;
 
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 @Entity(name = "domain")
 @RequiredArgsConstructor
+@ToString
 public class Domain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,15 +22,7 @@ public class Domain {
     public String name;
     public String url;
     public boolean verified;
+    @ToString.Exclude
     @OneToMany(mappedBy = "domain", cascade = CascadeType.ALL)
     public Set<Link> links = new HashSet<>();
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "name = " + name + ", " +
-                "url = " + url + ", " +
-                "verified = " + verified + ")";
-    }
 }
