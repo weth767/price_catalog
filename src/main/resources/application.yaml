@@ -1,6 +1,14 @@
 server:
   port: 8080
 spring:
+  #data:
+  #mongodb:
+  #authentication-database: admin
+  #username: root
+  #password: root
+  #database: webcrawler
+  #port: 27017
+  #host: localhost
   devtools:
     restart:
       poll-interval: 2s
@@ -11,7 +19,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   datasource:
     platform: postgres
     url: jdbc:postgresql://localhost:5432/webcrawler

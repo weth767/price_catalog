@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class WebcrawlerApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(WebcrawlerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(WebcrawlerApplication.class, args);
+    }
 }

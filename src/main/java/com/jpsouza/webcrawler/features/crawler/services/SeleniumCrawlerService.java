@@ -12,11 +12,9 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class CustomCrawlerServiceImplementation implements CustomCrawlerService {
-
+public class SeleniumCrawlerService {
     WebDriver driver;
 
-    @Override
     public void startCrawler(int crawlersNumber, Set<String> urls) {
         WebDriverManager.firefoxdriver().setup();
         driver = new FirefoxDriver();
@@ -46,7 +44,6 @@ public class CustomCrawlerServiceImplementation implements CustomCrawlerService 
         //driver.quit();
     }
 
-    @Override
     public void stopCrawler() {
     }
 }

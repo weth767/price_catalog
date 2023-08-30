@@ -1,15 +1,14 @@
 #!make
 
-clean_install:
+ci:
 	@echo "executing maven clean install"
 	@mvnw clean install
-
-run_clean_install: clean_install docker_up spring_run
-
-docker_up:
+dcu:
 	@echo "executing docker compose up detached"
 	@cd docker && docker-compose up -d
 
-spring_run:
+sr:
 	@echo "executing spring application"
 	@mvnw spring-boot:run
+
+run: ci dcu sr
