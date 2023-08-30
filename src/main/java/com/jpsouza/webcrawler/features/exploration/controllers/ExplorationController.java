@@ -20,7 +20,10 @@ public class ExplorationController {
     @PostMapping(value = "/start")
     public ResponseEntity<String> startCrawler() {
         try {
-            explorationService.startExploration(50, new HashSet<>(List.of("https://www.mercadolivre.com.br/")));
+            explorationService.startExploration(50, new HashSet<>(List.of("https://www.kabum.com.br/"))
+                    /*new HashSet<>(List.of("https://www.mercadolivre.com.br/",
+                            "https://www.amazon.com.br/",
+                            "https://www.kabum.com.br/"))*/);
             return ResponseEntity.ok("Crawler iniciado com sucesso!");
         } catch (Exception exception) {
             return ResponseEntity.ok("Crawler não foi iniciado com sucesso! Confira o log: " + exception.getMessage());

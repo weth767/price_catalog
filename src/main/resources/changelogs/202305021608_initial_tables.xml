@@ -20,6 +20,9 @@
             <column name="verified" type="boolean" defaultValue="false">
                 <constraints nullable="false"/>
             </column>
+            <column name="verified_in" type="timestamp" defaultValue="null">
+                <constraints nullable="true"/>
+            </column>
         </createTable>
         <createTable tableName="link">
             <column name="id" type="bigint" autoIncrement="true">
@@ -32,6 +35,9 @@
             </column>
             <column name="verified" type="boolean" defaultValue="false">
                 <constraints nullable="false"/>
+            </column>
+            <column name="verified_in" type="timestamp" defaultValue="null">
+                <constraints nullable="true"/>
             </column>
             <column name="domain_id" type="bigint">
                 <constraints nullable="false"

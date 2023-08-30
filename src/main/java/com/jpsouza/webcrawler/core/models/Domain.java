@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,4 +27,6 @@ public class Domain {
     @ToString.Exclude
     @OneToMany(mappedBy = "domain", cascade = CascadeType.ALL)
     public Set<Link> links = new HashSet<>();
+    @Column(name = "verified_in")
+    public LocalDateTime verifiedIn;
 }
