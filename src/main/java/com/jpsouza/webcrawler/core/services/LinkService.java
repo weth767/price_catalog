@@ -6,6 +6,7 @@ import com.jpsouza.webcrawler.core.repositories.LinkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,12 +26,13 @@ public class LinkService {
         return linkRepository.findByUrl(url);
     }
 
-    public void upsertLink(String url, Domain domain) {
+    public void upsertLink(String url, Domain domain, boolean verified, LocalDateTime verifiedIn) {
         if (!linkRepository.existsByUrl(url)) {
             Link link = new Link();
             link.url = url;
             link.domain = domain;
-            link.verified = false;
+            link.verified = verified;
+            link.verifiedIn = verifiedIn;
             linkRepository.save(link);
         }
     }

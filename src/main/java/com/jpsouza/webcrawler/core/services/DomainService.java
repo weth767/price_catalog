@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,7 @@ public class DomainService {
                 domain.name = FormatUtils.getOnlyDomainFromUrl(url);
                 domain.verified = false;
                 domainRepository.save(domain);
+                domain.verifiedIn = LocalDateTime.now();
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }
@@ -55,6 +57,7 @@ public class DomainService {
                 domain.name = FormatUtils.getOnlyDomainFromUrl(filteredUrl);
                 domain.url = filteredUrl;
                 domain.verified = false;
+                domain.verifiedIn = LocalDateTime.now();
                 domainsToSave.add(domain);
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);

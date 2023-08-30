@@ -5,12 +5,17 @@ import com.jpsouza.webcrawler.core.models.Link;
 import com.jpsouza.webcrawler.core.services.DomainService;
 import com.jpsouza.webcrawler.core.services.LinkService;
 import com.jpsouza.webcrawler.shared.utils.FormatUtils;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
+import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
+import java.net.MalformedURLException;
+import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -32,35 +37,32 @@ public class JSoupCrawlerService {
 
     /**
      * TODO
-     * primeiro: preciso criar uma estrutura parental em árvore onde, um link a ser explorado, tem seus filhos,
-     * e esses filhos não podem ser iguais aos outros pais ou outros filhos, transformando cada nó em um nó único e
-     * não repetitivo.
-     * <p>
-     * segundo: verificar a possibilidade de utilizar um banco de dados não relacional para esse tipo de validação e
-     * armazenamento
-     * <p>
-     * terceiro: inicializar threads para irem buscando no banco as urls a serem exploradas, threads, na qual serão o
-     * números de crawlers
+     * corrigir a questão de URLs simplificadas que fazem sempre acesso interno ao site, como na kabum,
+     * exemplo: /produto/475438/placa-de-video-rx-6750-xt-mech-2x-12g-v1-radeon-12gb-gddr6-freesync-dual-fan,
+     * verificar esse tipo de comportamento e acrescentar a url base antes
      */
     public void startCrawler(int crawlers, Set<String> urls) throws Exception {
         domainService.upsertAll(urls);
-        Optional<Domain> domain = domainService.findNextNotVerifiedDomain();
-        if (domain.isEmpty()) {
-            throw new Exception("Não há URLs para explorar. Chame o método configure para iniciar a lista de URLs " +
-                    "a serem exploradas");
-        }
         executorService = Executors.newFixedThreadPool(crawlers);
-        explore(domain.get().url, domain.get(), FormatUtils.getDomainName(domain.get().url));
+        List<Domain> domainList = domainService.findByUrlInOrderByIdAsc(urls);
+        for (Domain domain : domainList) {
+            explore(domain.url, domain, FormatUtils.getDomainName(domain.url));
+        }
     }
 
     private void explore(String url, Domain domain, String filteredText) throws Exception {
         Callable<Set<String>> callable = new JSoupCrawlerCallable(url, filteredText, linkService);
         Future<Set<String>> future = executorService.submit(callable);
         Set<String> links = future.get();
-        linkService.findByUrl(url).ifPresent((Link link) -> {
-            link.verified = true;
-            linkService.updateLink(link);
-        });
+        Optional<Link> linkOptional = linkService.findByUrl(url);
+        if (linkOptional.isPresent()) {
+            Link newLink = linkOptional.get();
+            newLink.verified = true;
+            newLink.verifiedIn = LocalDateTime.now();
+            linkService.updateLink(newLink);
+        } else {
+            linkService.upsertLink(url, domain, true, LocalDateTime.now());
+        }
         if (links.isEmpty()) {
             return;
         }
@@ -89,12 +91,33 @@ class JSoupCrawlerCallable implements Callable<Set<String>> {
     }
 
     @Override
-    public Set<String> call() throws Exception {
+    public Set<String> call() {
         if (linkService.existsByUrlAndVerifiedTrue(url)) {
             return new HashSet<>();
         }
-        Document document = Jsoup.connect(url).get();
-        Elements links = document.select("a[href~=^.*" + filteredText + ".*]");
-        return links.stream().map((elementLink) -> elementLink.attr("href")).collect(Collectors.toSet());
+        try {
+            //tratativa para os sites onde os links de produtos, não contém a URL do mesmo
+            if (url.startsWith("/") && !url.contains(filteredText)) {
+                String newUrl = (filteredText.endsWith("/") ? filteredText.substring(0, filteredText.length() - 1) : filteredText) + url;
+                Document document = Jsoup.connect(newUrl).get();
+                Elements links = document.select("a[href~=^.*" + filteredText + ".*]");
+                return links.stream().map((elementLink) -> elementLink.attr("href")).collect(Collectors.toSet());
+            }
+            Document document = Jsoup.connect(url).get();
+            Elements links = document.select("a[href~=^.*" + filteredText + ".*]");
+            return links.stream().map((elementLink) -> elementLink.attr("href")).collect(Collectors.toSet());
+        } catch (MalformedURLException malformedURLException) {
+            System.out.println("URL mal formada, precisa ter https ou http: " + url);
+            return new HashSet<>();
+        } catch (HttpStatusException httpStatusException) {
+            System.out.println("Página não encontrada");
+            return new HashSet<>();
+        } catch (UnsupportedMimeTypeException unsupportedMimeTypeException) {
+            System.out.println("Tipo de dado não suportado");
+            return new HashSet<>();
+        } catch (Exception exception) {
+            System.out.println("Erro: " + exception.getMessage());
+            return new HashSet<>();
+        }
     }
 }
