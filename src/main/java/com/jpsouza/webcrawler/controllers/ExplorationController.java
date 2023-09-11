@@ -1,6 +1,6 @@
-package com.jpsouza.webcrawler.features.exploration.controllers;
+package com.jpsouza.webcrawler.controllers;
 
-import com.jpsouza.webcrawler.features.exploration.services.ExplorationService;
+import com.jpsouza.webcrawler.crawler.ExplorationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
