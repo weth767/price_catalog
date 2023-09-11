@@ -1,6 +1,5 @@
-package com.jpsouza.webcrawler.features.exploration.services;
+package com.jpsouza.webcrawler.crawler;
 
-import com.jpsouza.webcrawler.features.crawler.services.JSoupCrawlerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,7 @@ public class ExplorationService {
     public void startExploration(int crawlers, Set<String> urls) throws Exception {
         jSoupService.startCrawler(crawlers, urls);
     }
-    
+
     public void stopExploration() {
         jSoupService.stopCrawler();
     }

@@ -1,4 +1,4 @@
-package com.jpsouza.webcrawler.shared.utils;
+package com.jpsouza.webcrawler.utils;
 
 import java.net.URI;
 import java.net.URISyntaxException;

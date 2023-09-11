@@ -1,8 +1,8 @@
-package com.jpsouza.webcrawler.core.services;
+package com.jpsouza.webcrawler.services;
 
-import com.jpsouza.webcrawler.core.models.Domain;
-import com.jpsouza.webcrawler.core.repositories.DomainRepository;
-import com.jpsouza.webcrawler.shared.utils.FormatUtils;
+import com.jpsouza.webcrawler.models.Domain;
+import com.jpsouza.webcrawler.repositories.DomainRepository;
+import com.jpsouza.webcrawler.utils.FormatUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

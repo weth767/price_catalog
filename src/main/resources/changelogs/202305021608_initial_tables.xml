@@ -54,5 +54,24 @@
                              deleteCascade="true"/>
             </column>
         </createTable>
+        <createTable tableName="logs">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"
+                             primaryKeyName="logs_pk"
+                />
+            </column>
+            <column name="datetime" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="logger" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="level" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>
