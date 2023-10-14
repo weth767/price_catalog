@@ -1,5 +1,6 @@
 package com.jpsouza.webcrawler.callables;
 
+import com.jpsouza.webcrawler.kafka.KafkaProducer;
 import com.jpsouza.webcrawler.services.LinkService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,11 +21,13 @@ public class JSoupCrawlerCallable implements Callable<Set<String>> {
     private final String url;
     private final String filteredText;
     private final LinkService linkService;
+    private final KafkaProducer kafkaProducer;
 
-    public JSoupCrawlerCallable(String url, String filteredText, LinkService linkService) {
+    public JSoupCrawlerCallable(String url, String filteredText, LinkService linkService, KafkaProducer kafkaProducer) {
         this.url = url;
         this.filteredText = filteredText;
         this.linkService = linkService;
+        this.kafkaProducer = kafkaProducer;
     }
 
     @Override
@@ -33,15 +36,14 @@ public class JSoupCrawlerCallable implements Callable<Set<String>> {
             return new HashSet<>();
         }
         try {
-            //tratativa para os sites onde os links de produtos, não contém a URL do mesmo
-            if (url.startsWith("/") && !url.contains(filteredText)) {
-                String newUrl = (filteredText.endsWith("/") ? filteredText.substring(0, filteredText.length() - 1) : filteredText) + url;
-                Document document = Jsoup.connect(newUrl).get();
-                Elements links = document.select("a[href~=^.*" + filteredText + ".*]");
-                return links.stream().map((elementLink) -> elementLink.attr("href")).collect(Collectors.toSet());
-            }
-            Document document = Jsoup.connect(url).get();
+            //tratativa para os sites onde os links de produtos, não contém a URL base do mesmo
+            String newUrl = url.startsWith("/") && !url.contains(filteredText) ?
+                    (filteredText.endsWith("/") ?
+                            filteredText.substring(0, filteredText.length() - 1) : filteredText) + url :
+                    url;
+            Document document = Jsoup.connect(newUrl).get();
             Elements links = document.select("a[href~=^.*" + filteredText + ".*]");
+            kafkaProducer.sendMessage(url);
             return links.stream().map((elementLink) -> elementLink.attr("href")).collect(Collectors.toSet());
         } catch (MalformedURLException malformedURLException) {
             System.out.println("URL mal formada, precisa ter https ou http: " + url);

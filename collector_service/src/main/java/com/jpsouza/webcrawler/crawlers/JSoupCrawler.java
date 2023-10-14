@@ -1,14 +1,14 @@
-package com.jpsouza.webcrawler.crawler;
+package com.jpsouza.webcrawler.crawlers;
 
 import com.jpsouza.webcrawler.callables.JSoupCrawlerCallable;
+import com.jpsouza.webcrawler.kafka.KafkaProducer;
 import com.jpsouza.webcrawler.models.Domain;
 import com.jpsouza.webcrawler.models.Link;
 import com.jpsouza.webcrawler.services.DomainService;
 import com.jpsouza.webcrawler.services.LinkService;
-import com.jpsouza.webcrawler.utils.FormatUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,49 +19,51 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-@Service
-public class JSoupCrawlerService {
-    private static final Logger LOGGER = LogManager.getLogger(JSoupCrawlerService.class);
+@Component
+public class JSoupCrawler {
+    private static final Logger LOGGER = LogManager.getLogger(JSoupCrawler.class);
     private final DomainService domainService;
     private final LinkService linkService;
+    private final KafkaProducer kafkaProducer;
     private ExecutorService executorService;
 
-    public JSoupCrawlerService(DomainService domainService, LinkService linkService) {
+    public JSoupCrawler(DomainService domainService, LinkService linkService, KafkaProducer kafkaProducer) {
         this.domainService = domainService;
         this.linkService = linkService;
+        this.kafkaProducer = kafkaProducer;
     }
 
-    /**
-     * TODO
-     * corrigir a questão de URLs simplificadas que fazem sempre acesso interno ao site, como na kabum,
-     * exemplo: /produto/475438/placa-de-video-rx-6750-xt-mech-2x-12g-v1-radeon-12gb-gddr6-freesync-dual-fan,
-     * verificar esse tipo de comportamento e acrescentar a url base antes
-     */
     public void startCrawler(int crawlers, Set<String> urls) throws Exception {
         domainService.upsertAll(urls);
         executorService = Executors.newFixedThreadPool(crawlers);
         List<Domain> domainList = domainService.findByUrlInOrderByIdAsc(urls);
         for (Domain domain : domainList) {
-            explore(domain.url, domain, FormatUtils.getDomainName(domain.url));
+            //alterado FormatUtils.getDomainName(domain.url) para domain.url para teste
+            explore(domain.url, domain, domain.url);
         }
     }
 
     private void explore(String url, Domain domain, String filteredText) throws Exception {
-        Callable<Set<String>> callable = new JSoupCrawlerCallable(url, filteredText, linkService);
+        LOGGER.info(String.format("Explorando a url: %s", url));
+        Callable<Set<String>> callable = new JSoupCrawlerCallable(url, filteredText, linkService, kafkaProducer);
         Future<Set<String>> future = executorService.submit(callable);
         Set<String> links = future.get();
         Optional<Link> linkOptional = linkService.findByUrl(url);
+        //evita links duplicados
         if (linkOptional.isPresent()) {
+            //se o link já foi visto antes, agora que eu tenho todos os links dentro desse site, eu marco ele como verificado
             Link newLink = linkOptional.get();
             newLink.verified = true;
             newLink.verifiedIn = LocalDateTime.now();
             linkService.updateLink(newLink);
         } else {
+            //se ainda não foi visto, mas agora que eu tenho todos os link dentro dele, eu salvo ele como visto também
             linkService.upsertLink(url, domain, true, LocalDateTime.now());
         }
         if (links.isEmpty()) {
             return;
         }
+        //salva os links encontrados dentro da página da url testada
         linkService.upsertLinks(links, domain);
         for (String link : links) {
             explore(link, domain, filteredText);
