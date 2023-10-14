@@ -1,4 +1,4 @@
-package com.jpsouza.webcrawler.crawler;
+package com.jpsouza.webcrawler.crawlers;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
@@ -6,13 +6,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Set;
 
-@Service
-public class SeleniumCrawlerService {
+@Component
+public class SeleniumCrawler {
     WebDriver driver;
 
     public void startCrawler(int crawlersNumber, Set<String> urls) {

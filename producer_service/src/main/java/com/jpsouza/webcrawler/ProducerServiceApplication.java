@@ -1,8 +1,10 @@
-package com.jpsouza.webcrawler.producer_service;
+package com.jpsouza.webcrawler;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.kafka.annotation.EnableKafka;
 
+@EnableKafka
 @SpringBootApplication
 public class ProducerServiceApplication {
 

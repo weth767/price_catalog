@@ -1,15 +1,14 @@
 package com.jpsouza.webcrawler.controllers;
 
-import com.jpsouza.webcrawler.crawler.ExplorationService;
+import com.jpsouza.webcrawler.dtos.ExplorationDataDTO;
+import com.jpsouza.webcrawler.services.ExplorationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashSet;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/crawler")
@@ -18,12 +17,9 @@ public class ExplorationController {
     private final ExplorationService explorationService;
 
     @PostMapping(value = "/start")
-    public ResponseEntity<String> startCrawler() {
+    public ResponseEntity<String> startCrawler(@RequestBody ExplorationDataDTO explorationData) {
         try {
-            explorationService.startExploration(50, new HashSet<>(List.of("https://www.kabum.com.br/"))
-                    /*new HashSet<>(List.of("https://www.mercadolivre.com.br/",
-                            "https://www.amazon.com.br/",
-                            "https://www.kabum.com.br/"))*/);
+            explorationService.startExploration(explorationData.crawlers, explorationData.links);
             return ResponseEntity.ok("Crawler iniciado com sucesso!");
         } catch (Exception exception) {
             return ResponseEntity.ok("Crawler não foi iniciado com sucesso! Confira o log: " + exception.getMessage());

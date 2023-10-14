@@ -4,14 +4,29 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class FormatUtils {
-    public static String getOnlyDomainFromUrl(String url) throws URISyntaxException {
-        URI uri = new URI(url);
-        return uri.getHost();
+    public static String getOnlyDomainFromUrl(String url) {
+        try {
+            return new URI(url).getHost();
+        } catch (URISyntaxException e) {
+            return url;
+        }
     }
 
-    public static String getDomainName(String url) throws URISyntaxException {
-        URI uri = new URI(url);
-        String domain = uri.getHost();
-        return domain.startsWith("www.") ? domain.substring(4) : domain;
+    public static String getDomainName(String url) {
+        try {
+            URI uri = new URI(url);
+            String domain = uri.getHost();
+            return domain.startsWith("www.") ?
+                    domain.substring(4).split("\\.")[0] :
+                    domain.split("\\.")[0];
+        } catch (Exception e) {
+            try {
+                return url.startsWith("www.") ?
+                        url.substring(4).split("\\.")[0] :
+                        url.split("\\.")[0];
+            } catch (Exception e1) {
+                return url;
+            }
+        }
     }
 }

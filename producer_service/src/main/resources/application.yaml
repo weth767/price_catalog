@@ -7,7 +7,7 @@ spring:
       quiet-period: 1s
     remote:
       debug:
-        local-port: 8021
+        local-port: 8091
   jpa:
     show-sql: true
     hibernate:
@@ -20,3 +20,11 @@ spring:
     driverClassName: org.postgresql.Driver
     initialization-mode: always
     continue-won-error: true
+  kafka:
+    producer:
+      bootstrap-servers: 0.0.0.0:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.JsonSerializer
+    topics:
+      products: 6bb2322a221e8674e135be0a38698e94839900197a60e442b4a1e63e3256c40e
+      links: 953859498b12b7926ee33080400ca65b0dc17de0c3e24828a13e6e4f06704bbf

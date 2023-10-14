@@ -17,6 +17,7 @@ services:
 
   zookeeper:
     image: bitnami/zookeeper:3.9
+    container_name: kafka_zookeeper
     ports:
       - "2181:2181"
     volumes:
@@ -28,6 +29,7 @@ services:
 
   kafka:
     image: 'bitnami/kafka:3.4'
+    container_name: kafka
     restart: on-failure
     ports:
       - "9092:9092"
@@ -36,7 +38,12 @@ services:
     networks:
       - webcrawler
     environment:
+      - KAFKA_CFG_BROKER_ID=1
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_NUM_PARTITIONS=3
+      - ALLOW_PLAINTEXT_LISTENER=yes
     volumes:
       - "kafka_data:/bitnami"
 

@@ -22,3 +22,10 @@ spring:
     continue-on-error: true
   liquibase:
     change-log: classpath:master.xml
+  kafka:
+    producer:
+      bootstrap-servers: 0.0.0.0:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.JsonSerializer
+    topics:
+      products: 6bb2322a221e8674e135be0a38698e94839900197a60e442b4a1e63e3256c40e
