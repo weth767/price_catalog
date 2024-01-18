@@ -1,0 +1,22 @@
+server:
+  port: 8083
+spring:
+  devtools:
+    restart:
+      poll-interval: 2s
+      quiet-period: 1s
+    remote:
+      debug:
+        local-port: 8093
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5434/webcrawlerclassifier
+    username: root
+    password: root
+    driverClassName: org.postgresql.Driver
+    initialization-mode: always
+    continue-on-error: true

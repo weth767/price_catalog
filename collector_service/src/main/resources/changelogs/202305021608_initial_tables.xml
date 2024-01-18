@@ -73,40 +73,5 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <!--<createTable tableName="product">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true"
-                             primaryKeyName="product_pk"
-                />
-            </column>
-            <column name="description" type="text">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="image_url" type="text">
-                <constraints nullable="true"/>
-            </column>
-        </createTable>
-        <createTable tableName="product_link_price">
-            <column name="price" type="text">
-                <constraints nullable="false"/>
-            </column>
-            <column name="link_id" type="bigint">
-                <constraints nullable="false"
-                             referencedTableName="link"
-                             referencedColumnNames="id"
-                             foreignKeyName="link_fk"
-                             deleteCascade="true"/>
-            </column>
-            <column name="product_id" type="bigint">
-                <constraints nullable="false"
-                             referencedTableName="product"
-                             referencedColumnNames="id"
-                             foreignKeyName="product_fk"
-                             deleteCascade="true"/>
-            </column>
-            <column name="datetime" type="timestamp">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>-->
     </changeSet>
 </databaseChangeLog>

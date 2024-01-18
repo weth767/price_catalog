@@ -1,5 +1,5 @@
 server:
-  port: 8090
+  port: 8081
 spring:
   devtools:
     restart:
@@ -24,7 +24,13 @@ spring:
     producer:
       bootstrap-servers: 0.0.0.0:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.JsonSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      bootstrap-servers: 127.0.0.1:9092
+      group-id: webcrawler
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     topics:
       products: 6bb2322a221e8674e135be0a38698e94839900197a60e442b4a1e63e3256c40e
       links: 953859498b12b7926ee33080400ca65b0dc17de0c3e24828a13e6e4f06704bbf

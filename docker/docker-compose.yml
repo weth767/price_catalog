@@ -1,17 +1,48 @@
-version: '3.8'
+version: "3.8"
 services:
-  postgres:
+  postgresproducer:
     image: postgres:14.3
-    container_name: postgres_db
+    container_name: postgres_producer
     restart: always
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=webcrawler
+      - POSTGRES_DB=webcrawlerproducercollector
     ports:
       - "5432:5432"
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - postgres_producer:/var/lib/postgresql/data
+    networks:
+      - webcrawler
+
+  postgresconsumer:
+    image: postgres:14.3
+    container_name: postgres_consumer
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=webcrawlerconsumer
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_consumer:/var/lib/postgresql/data
+    networks:
+      - webcrawler
+
+  postgresclassifier:
+    image: postgres:14.3
+    container_name: postgres_classifier
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=webcrawlerclassifier
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_classifier:/var/lib/postgresql/data
     networks:
       - webcrawler
 
@@ -28,7 +59,7 @@ services:
       - webcrawler
 
   kafka:
-    image: 'bitnami/kafka:3.4'
+    image: "bitnami/kafka:3.4"
     container_name: kafka
     restart: on-failure
     ports:
@@ -48,7 +79,11 @@ services:
       - "kafka_data:/bitnami"
 
 volumes:
-  postgres:
+  postgres_producer:
+    driver: local
+  postgres_consumer:
+    driver: local
+  postgres_classifier:
     driver: local
   zookeeper_data:
     driver: local

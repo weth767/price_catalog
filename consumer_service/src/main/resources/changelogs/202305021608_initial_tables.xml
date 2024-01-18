@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="202306081639-1" author="João Paulo de Souza">
+        <createTable tableName="product">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"
+                             primaryKeyName="product_pk"
+                />
+            </column>
+            <column name="name" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="true"/>
+            </column>
+            <column name="brand" type="text">
+                <constraints nullable="true"/>
+            </column>
+            <column name="status" type="tinyint">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="product_price">
+            <column name="product_id" type="bigint">
+                <constraints nullable="false"
+                             referencedTableName="product"
+                             referencedColumnNames="id"
+                             foreignKeyName="product_fk"
+                             deleteCascade="true"/>
+            </column>
+            <column name="price" type="decimal(12,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="datetime" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="url" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_url" type="text">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="logs">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"
+                             primaryKeyName="logs_pk"
+                />
+            </column>
+            <column name="datetime" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="logger" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="level" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

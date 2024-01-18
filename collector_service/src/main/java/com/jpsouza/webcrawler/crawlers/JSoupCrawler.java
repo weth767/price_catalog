@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -44,7 +45,6 @@ public class JSoupCrawler {
     }
 
     private void explore(String url, Domain domain, String filteredText) throws Exception {
-        LOGGER.info(String.format("Explorando a url: %s", url));
         Callable<Set<String>> callable = new JSoupCrawlerCallable(url, filteredText, linkService, kafkaProducer);
         Future<Set<String>> future = executorService.submit(callable);
         Set<String> links = future.get();
@@ -71,7 +71,7 @@ public class JSoupCrawler {
     }
 
     public void stopCrawler() {
-        if (executorService != null && (!executorService.isShutdown() || !executorService.isTerminated())) {
+        if (Objects.nonNull(executorService) && (!executorService.isShutdown() || !executorService.isTerminated())) {
             executorService.shutdown();
             LOGGER.info("Serviço parado");
         }

@@ -5,9 +5,74 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fc2134f8-3518-4aca-9ae2-892403bb6aa2" name="Changes" comment="Nova estrutura do projeto">
+      <change afterPath="$PROJECT_DIR$/classifier_service/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/consumer_service/src/main/java/com/jpsouza/webcrawler/dtos/ProductDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/consumer_service/src/main/java/com/jpsouza/webcrawler/enums/ProductStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/consumer_service/src/main/java/com/jpsouza/webcrawler/listeners/ProductsTopicListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/consumer_service/src/main/java/com/jpsouza/webcrawler/models/Product.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/consumer_service/src/main/java/com/jpsouza/webcrawler/models/ProductPrice.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/consumer_service/src/main/java/com/jpsouza/webcrawler/services/ProductService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/consumer_service/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/consumer_service/src/main/resources/changelogs/202305021608_initial_tables.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/consumer_service/src/main/resources/liquibase.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/consumer_service/src/main/resources/log4j2.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/consumer_service/src/main/resources/master.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/dtos/ProductDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/listeners/ProductsTopicListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/runnables/ProductPageRunnable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/services/LinkProductService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jpa-buddy.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jpa-buddy.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/Readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classifier_service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/classifier_service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classifier_service/src/main/java/com/jpsouza/webcrawler/classifier_service/ClassifierServiceApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/classifier_service/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/classifier_service/src/test/java/com/jpsouza/webcrawler/classifier_service/ClassifierServiceApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/CollectorServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/CollectorServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/callables/JSoupCrawlerCallable.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/callables/JSoupCrawlerCallable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/configurations/KafkaTopicConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/configurations/KafkaTopicConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/controllers/ExplorationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/controllers/ExplorationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/crawlers/JSoupCrawler.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/crawlers/JSoupCrawler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/crawlers/SeleniumCrawler.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/crawlers/SeleniumCrawler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/dtos/ExplorationDataDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/dtos/ExplorationDataDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/kafka/KafkaProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/kafka/KafkaProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/models/Domain.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/models/Domain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/models/Link.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/models/Link.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/repositories/DomainRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/repositories/DomainRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/repositories/LinkRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/repositories/LinkRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/runnables/JsoupCrawlerRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/runnables/JsoupCrawlerRunnable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/services/DomainService.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/services/DomainService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/services/ExplorationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/services/ExplorationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/services/LinkService.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/services/LinkService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/utils/FormatUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/utils/UrlUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/resources/changelogs/202305021608_initial_tables.xml" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/resources/changelogs/202305021608_initial_tables.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/resources/liquibase.properties" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/resources/liquibase.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/resources/log4j2.properties" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/resources/log4j2.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/resources/master.xml" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/resources/master.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer_service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/consumer_service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer_service/src/main/java/com/jpsouza/webcrawler/consumer_service/ConsumerServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/consumer_service/src/main/java/com/jpsouza/webcrawler/ConsumerServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer_service/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/consumer_service/src/test/java/com/jpsouza/webcrawler/consumer_service/ConsumerServiceApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/consumer_service/src/test/java/com/jpsouza/webcrawler/ConsumerServiceApplicationTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/producer_service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/producer_service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/ProducerServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/ProducerServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/configuration/KafkaTopicConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/configuration/KafkaTopicConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/controllers/TesteController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/kafka/KafkaProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/kafka/KafkaProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/models/Product.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/models/ProductLink.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/repositories/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/consumer_service/src/main/java/com/jpsouza/webcrawler/repositories/ProductRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/services/ProductService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/utils/Constants.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/producer_service/src/main/java/com/jpsouza/webcrawler/utils/FormatUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/consumer_service/src/main/java/com/jpsouza/webcrawler/utils/FormatUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/producer_service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/producer_service/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/producer_service/src/test/java/com/jpsouza/webcrawler/producer_service/ProducerServiceApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/producer_service/src/test/java/com/jpsouza/webcrawler/ProducerServiceApplicationTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,29 +127,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/joao_/Documents/Projetos/java/webcrawler/collector_service/src/main/java/com/jpsouza/webcrawler/services&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;rearrange.code.on.save&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/joaopaulo/Documentos/Projetos/java/webcrawler",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "rearrange.code.on.save": "true",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\joao_\Documents\Projetos\java\webcrawler\classifier_service\src\test\java\com\jpsouza\webcrawler" />
+      <recent name="C:\Users\joao_\Documents\Projetos\java\webcrawler\classifier_service\src\main\java\com\jpsouza\webcrawler" />
       <recent name="C:\Users\joao_\Documents\Projetos\java\webcrawler\producer_service\src\main\resources" />
       <recent name="C:\Users\joao_\Documents\Projetos\java\webcrawler\webcrawler\src\main\resources\changelogs" />
       <recent name="C:\Users\joao_\Documents\Projetos\java\webcrawler\webcrawler\docker" />
-      <recent name="C:\Users\joao_\Documents\Projetos\java\webcrawler\webcrawler\src\main\resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\joao_\Documents\Projetos\java\webcrawler\producer_service\src\test\java\com\jpsouza\webcrawler" />
+      <recent name="C:\Users\joao_\Documents\Projetos\java\webcrawler\consumer_service\src\test\java\com\jpsouza\webcrawler" />
+      <recent name="C:\Users\joao_\Documents\Projetos\java\webcrawler\consumer_service\src\main\java\com\jpsouza\webcrawler" />
       <recent name="C:\Users\joao_\Documents\Projetos\java\webcrawler\collector_service\src\main\java\com\jpsouza\webcrawler\services" />
     </key>
   </component>

@@ -13,7 +13,7 @@ public class KafkaProducer {
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
-    @Value("${spring.kafka.topics.products}")
+    @Value("${spring.kafka.topics.links}")
     private String topic;
 
     public void sendMessage(String url) {

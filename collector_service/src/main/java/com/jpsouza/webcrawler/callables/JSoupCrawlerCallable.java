@@ -2,6 +2,7 @@ package com.jpsouza.webcrawler.callables;
 
 import com.jpsouza.webcrawler.kafka.KafkaProducer;
 import com.jpsouza.webcrawler.services.LinkService;
+import com.jpsouza.webcrawler.utils.UrlUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.HttpStatusException;
@@ -32,19 +33,23 @@ public class JSoupCrawlerCallable implements Callable<Set<String>> {
 
     @Override
     public Set<String> call() {
-        if (linkService.existsByUrlAndVerifiedTrue(url)) {
-            return new HashSet<>();
-        }
+        /*
+         * if (linkService.existsByUrlAndVerifiedTrue(url)) {
+         * return new HashSet<>();
+         * }
+         */
         try {
-            //tratativa para os sites onde os links de produtos, não contém a URL base do mesmo
-            String newUrl = url.startsWith("/") && !url.contains(filteredText) ?
-                    (filteredText.endsWith("/") ?
-                            filteredText.substring(0, filteredText.length() - 1) : filteredText) + url :
-                    url;
+            // tratativa para os sites onde os links de produtos, não contém a URL base do
+            // mesmo
+            String newUrl = url.startsWith("/") && !url.contains(filteredText)
+                    ? (filteredText.endsWith("/") ? filteredText.substring(0, filteredText.length() - 1) : filteredText)
+                            + url
+                    : url;
             Document document = Jsoup.connect(newUrl).get();
             Elements links = document.select("a[href~=^.*" + filteredText + ".*]");
             kafkaProducer.sendMessage(url);
-            return links.stream().map((elementLink) -> elementLink.attr("href")).collect(Collectors.toSet());
+            return links.stream().map((elementLink) -> elementLink.attr("href")).filter(UrlUtils::isUrlValid)
+                    .collect(Collectors.toSet());
         } catch (MalformedURLException malformedURLException) {
             System.out.println("URL mal formada, precisa ter https ou http: " + url);
             LOGGER.error("URL mal formada, precisa ter https ou http: " + url);

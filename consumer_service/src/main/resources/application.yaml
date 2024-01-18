@@ -1,0 +1,33 @@
+server:
+  port: 8082
+spring:
+  devtools:
+    restart:
+      poll-interval: 2s
+      quiet-period: 1s
+    remote:
+      debug:
+        local-port: 8092
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5433/webcrawler
+    username: root
+    password: root
+    driverClassName: org.postgresql.Driver
+    initialization-mode: always
+    continue-on-error: true
+  liquibase:
+    change-log: classpath:master.xml
+  kafka:
+    consumer:
+      bootstrap-servers: 127.0.0.1:9092
+      group-id: webcrawler
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    topics:
+      products: 6bb2322a221e8674e135be0a38698e94839900197a60e442b4a1e63e3256c40e

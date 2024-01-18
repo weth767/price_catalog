@@ -8,7 +8,7 @@ import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
 public class KafkaTopicConfig {
-    @Value("${spring.kafka.topics.products}")
+    @Value("${spring.kafka.topics.links}")
     private String topic;
 
     @Bean
