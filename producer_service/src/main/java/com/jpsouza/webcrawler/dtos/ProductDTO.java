@@ -10,15 +10,8 @@ public class ProductDTO {
     private String imageUrl;
     private String price;
     private String url;
-
-    @Override
-    public String toString() {
-        return
-                name + "\n" +
-                description + "\n" +
-                brand + "\n" +
-                imageUrl + "\n" +
-                price + "\n" +
-                url;
-    }
+    private String availability;
+    private String currency;
+    private String category;
+    private String condition;
 }
