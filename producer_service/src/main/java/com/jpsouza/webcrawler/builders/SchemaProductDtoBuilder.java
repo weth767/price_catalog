@@ -1,9 +1,10 @@
 package com.jpsouza.webcrawler.builders;
 
-import com.jpsouza.webcrawler.dtos.ProductDTO;
-
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import com.jpsouza.webcrawler.dtos.ProductDTO;
 
 public class SchemaProductDtoBuilder {
     private final Map<?, ?> schema;
@@ -37,6 +38,10 @@ public class SchemaProductDtoBuilder {
         }
         if (imageData instanceof Map && ((Map<?, ?>) imageData).containsKey("url")) {
             this.imageUrl = (String) ((Map<?, ?>) imageData).get("url");
+            return this;
+        }
+        if (imageData instanceof List<?> && !((List<?>) imageData).isEmpty()) {
+            this.imageUrl = (String) ((List<?>) imageData).get(0);
             return this;
         }
         this.imageUrl = "";
@@ -92,7 +97,8 @@ public class SchemaProductDtoBuilder {
 
     public SchemaProductDtoBuilder offersAssociatedData() {
         if (!this.schema.containsKey("offers") ||
-                !(this.schema.get("offers") instanceof Map)) {
+                (!(this.schema.get("offers") instanceof Map) &&
+                        !(this.schema.get("offers") instanceof List<?>))) {
             this.price = "0";
             this.condition = "";
             this.availability = "https://schema.org/OutOfStock";
@@ -100,12 +106,35 @@ public class SchemaProductDtoBuilder {
             this.url = this.receivedUrl;
             return this;
         }
+        if (this.schema.get("offers") instanceof List<?> && ((List<?>) this.schema.get("offers")).isEmpty()) {
+            this.price = "0";
+            this.condition = "";
+            this.availability = "https://schema.org/OutOfStock";
+            this.currency = "BRL";
+            this.url = this.receivedUrl;
+            return this;
+        }
+        if (this.schema.get("offers") instanceof List<?>) {
+            Map<?, ?> offersData = (Map<?, ?>) ((List<?>) this.schema.get("offers")).get(0);
+            price = offersData.containsKey("price") ? offersData.get("price").toString()
+                    : offersData.containsKey("lowPrice") ? offersData.get("lowPrice").toString()
+                            : offersData.containsKey("highPrice") ? offersData.get("highPrice").toString() : "0";
+            condition = offersData.containsKey("itemCondition") ? (String) offersData.get("itemCondition")
+                    : this.schema.containsKey("itemCondition") ? (String) this.schema.get("itemCondition") : "";
+            availability = offersData.containsKey("availability") ? (String) offersData.get("availability")
+                    : "https://schema.org/OutOfStock";
+            currency = offersData.containsKey("priceCurrency") ? (String) offersData.get("priceCurrency") : "BRL";
+            url = offersData.containsKey("url") ? (String) offersData.get("url") : this.receivedUrl;
+            return this;
+        }
         Map<?, ?> offersData = (Map<?, ?>) this.schema.get("offers");
-        price = offersData.containsKey("price") ? (String) offersData.get("price") : "0";
-        condition = offersData.containsKey("itemCondition") ? (String) offersData.get("itemCondition") :
-                this.schema.containsKey("itemCondition") ? (String) this.schema.get("itemCondition") : "";
-        availability = offersData.containsKey("availability") ? (String) offersData.get("availability") :
-                "https://schema.org/OutOfStock";
+        price = offersData.containsKey("price") ? offersData.get("price").toString()
+                : offersData.containsKey("lowPrice") ? offersData.get("lowPrice").toString()
+                        : offersData.containsKey("highPrice") ? offersData.get("highPrice").toString() : "0";
+        condition = offersData.containsKey("itemCondition") ? (String) offersData.get("itemCondition")
+                : this.schema.containsKey("itemCondition") ? (String) this.schema.get("itemCondition") : "";
+        availability = offersData.containsKey("availability") ? (String) offersData.get("availability")
+                : "https://schema.org/OutOfStock";
         currency = offersData.containsKey("priceCurrency") ? (String) offersData.get("priceCurrency") : "BRL";
         url = offersData.containsKey("url") ? (String) offersData.get("url") : this.receivedUrl;
         return this;
