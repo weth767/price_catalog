@@ -39,6 +39,6 @@ public class ProducerServiceApplication {
 				"https://www.webcontinental.com.br/refrigerador-brastemp-side-inverse-3-portas-frost-free-554-litros-inox-bro85ak/p",
 				"https://www.angeloni.com.br/eletro/geladeira---refrigerador-brastemp-inverter-frost-free--bro85-554-litros-evox-133462/p?idsku=133365"));
 		productService.verifyProductPageConditions(
-				tagDomains.get(0));
+				schemaDomains.get(0));
 	}
 }

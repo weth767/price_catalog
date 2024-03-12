@@ -1,17 +1,19 @@
 package com.jpsouza.webcrawler.services;
 
-import com.jpsouza.webcrawler.models.Domain;
-import com.jpsouza.webcrawler.models.Link;
-import com.jpsouza.webcrawler.repositories.LinkRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
+import com.jpsouza.webcrawler.models.Domain;
+import com.jpsouza.webcrawler.models.Link;
+import com.jpsouza.webcrawler.repositories.LinkRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +37,10 @@ public class LinkService {
             link.verifiedIn = verifiedIn;
             linkRepository.save(link);
         }
+    }
+
+    public void resetAllLinks() {
+        linkRepository.resetAllLinks();
     }
 
     public void upsertLinks(Set<String> urls, Domain domain) {

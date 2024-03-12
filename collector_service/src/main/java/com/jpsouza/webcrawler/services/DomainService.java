@@ -1,16 +1,18 @@
 package com.jpsouza.webcrawler.services;
 
-import com.jpsouza.webcrawler.models.Domain;
-import com.jpsouza.webcrawler.repositories.DomainRepository;
-import com.jpsouza.webcrawler.utils.UrlUtils;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
+import com.jpsouza.webcrawler.models.Domain;
+import com.jpsouza.webcrawler.repositories.DomainRepository;
+import com.jpsouza.webcrawler.utils.UrlUtils;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,10 @@ public class DomainService {
     public List<Domain> findByUrlInOrderByIdAsc(Set<String> urls) {
         return domainRepository
                 .findByUrlInOrderByIdAsc(urls.stream().map(UrlUtils::getOnlyDomainFromUrl).collect(Collectors.toSet()));
+    }
+
+    public List<Domain> findAll() {
+        return domainRepository.findAll();
     }
 
     public void upsertAll(Set<String> urls) {

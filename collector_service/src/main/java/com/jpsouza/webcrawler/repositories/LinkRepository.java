@@ -1,13 +1,18 @@
 package com.jpsouza.webcrawler.repositories;
 
-import com.jpsouza.webcrawler.models.Link;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Repository;
-
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Repository;
+
+import com.jpsouza.webcrawler.models.Link;
 
 @Repository
 public interface LinkRepository extends JpaRepository<Link, Long> {
@@ -18,4 +23,10 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
     List<Link> findByUrlInOrderByIdAsc(@NonNull Collection<String> urls);
 
     Optional<Link> findByUrl(@NonNull String url);
+
+    boolean existsByUrlIgnoreCaseAndVerifiedInBefore(@NonNull String url, @Nullable LocalDateTime verifiedIn);
+
+    @Modifying
+    @Query(value = "update table links set verified = false", nativeQuery = true)
+    void resetAllLinks();
 }

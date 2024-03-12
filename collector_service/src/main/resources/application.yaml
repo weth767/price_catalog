@@ -16,7 +16,7 @@ spring:
       ddl-auto: update
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/webcrawlerconsumer
+    url: jdbc:postgresql://localhost:5432/webcrawlerproducercollector
     username: root
     password: root
     driverClassName: org.postgresql.Driver

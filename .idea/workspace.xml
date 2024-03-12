@@ -4,7 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc2134f8-3518-4aca-9ae2-892403bb6aa2" name="Changes" comment="Ajustando os microserviços" />
+    <list default="true" id="fc2134f8-3518-4aca-9ae2-892403bb6aa2" name="Changes" comment="Ajustando os microserviços">
+      <change afterPath="$PROJECT_DIR$/collector_service/Makefile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/runnables/JsoupCompleteCrawlingRunnable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/callables/JSoupCrawlerCallable.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/callables/JSoupCrawlerCallable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/controllers/ExplorationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/controllers/ExplorationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/crawlers/JSoupCrawler.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/crawlers/JSoupCrawler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/repositories/LinkRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/repositories/LinkRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/services/DomainService.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/services/DomainService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/services/ExplorationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/services/ExplorationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/services/LinkService.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/services/LinkService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/utils/UrlUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/java/com/jpsouza/webcrawler/utils/UrlUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/resources/liquibase.properties" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/resources/liquibase.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collector_service/src/main/resources/log4j2.properties" beforeDir="false" afterPath="$PROJECT_DIR$/collector_service/src/main/resources/log4j2.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -58,22 +75,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/joaopaulo/Documentos/Projetos/java/webcrawler",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "rearrange.code.on.save": "true",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/joao_/Documents/TCC/price_catalog&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;rearrange.code.on.save&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\joao_\Documents\Projetos\java\webcrawler\classifier_service\src\test\java\com\jpsouza\webcrawler" />
@@ -132,6 +149,13 @@
         <item itemvalue="Application.WebcrawlerApplication" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-11.0.21-corretto-11.0.21-4caba194b151-9f4ef98c" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">

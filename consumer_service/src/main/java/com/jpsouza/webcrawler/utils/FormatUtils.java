@@ -1,4 +1,4 @@
-package com.jpsouza.webcrawler.consumer_service.utils;
+package com.jpsouza.webcrawler.utils;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;

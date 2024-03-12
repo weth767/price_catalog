@@ -17,7 +17,8 @@ public class UrlUtils {
 
     public static String getOnlyDomainFromUrl(String url) {
         try {
-            return new URI(url).getHost();
+            String newUrl = "https://" + new URI(url).getHost();
+            return newUrl;
         } catch (URISyntaxException e) {
             return url;
         }
@@ -27,16 +28,17 @@ public class UrlUtils {
         try {
             URI uri = new URI(url);
             String domain = uri.getHost();
-            return domain.startsWith("www.") ?
-                    domain.substring(4).split("\\.")[0] :
-                    domain.split("\\.")[0];
+            String newUrl = domain.startsWith("www.") ? domain.substring(4).split("\\.")[0] : domain.split("\\.")[0];
+            newUrl = !newUrl.contains("https://") ? "https://" + newUrl : newUrl;
+            return newUrl;
         } catch (Exception e) {
             try {
-                return url.startsWith("www.") ?
-                        url.substring(4).split("\\.")[0] :
-                        url.split("\\.")[0];
+                String newUrl = url.startsWith("www.") ? url.substring(4).split("\\.")[0] : url.split("\\.")[0];
+                newUrl = !newUrl.contains("https://") ? "https://" + newUrl : newUrl;
+                return newUrl;
             } catch (Exception e1) {
-                return url;
+                String newUrl = !url.contains("https://") ? "https://" + url : url;
+                return newUrl;
             }
         }
     }

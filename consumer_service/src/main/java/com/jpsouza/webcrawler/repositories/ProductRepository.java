@@ -1,6 +1,8 @@
-package com.jpsouza.webcrawler.consumer_service.repositories;
+package com.jpsouza.webcrawler.repositories;
 
-import com.jpsouza.webcrawler.consumer_service.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProductRepository extends JpaRepository<Product, Long>{}
+import com.jpsouza.webcrawler.models.Product;
+
+public interface ProductRepository extends JpaRepository<Product, Long> {
+}

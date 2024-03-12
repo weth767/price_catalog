@@ -1,14 +1,16 @@
 package com.jpsouza.webcrawler.controllers;
 
-import com.jpsouza.webcrawler.dtos.ExplorationDataDTO;
-import com.jpsouza.webcrawler.services.ExplorationService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.jpsouza.webcrawler.dtos.ExplorationDataDTO;
+import com.jpsouza.webcrawler.services.ExplorationService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping(value = "/crawler")
@@ -22,7 +24,8 @@ public class ExplorationController {
             explorationService.startExploration(explorationData.crawlers, explorationData.links);
             return ResponseEntity.ok("Crawler iniciado com sucesso!");
         } catch (Exception exception) {
-            return ResponseEntity.ok("Crawler não foi iniciado com sucesso! Confira o log: " + exception.getMessage());
+            return ResponseEntity.internalServerError()
+                    .body("Crawler não foi iniciado com sucesso! Confira o log: " + exception.getMessage());
         }
     }
 
