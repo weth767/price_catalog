@@ -29,7 +29,6 @@ public class UrlUtils {
             URI uri = new URI(url);
             String domain = uri.getHost();
             String newUrl = domain.startsWith("www.") ? domain.substring(4).split("\\.")[0] : domain.split("\\.")[0];
-            newUrl = !newUrl.contains("https://") ? "https://" + newUrl : newUrl;
             return newUrl;
         } catch (Exception e) {
             try {

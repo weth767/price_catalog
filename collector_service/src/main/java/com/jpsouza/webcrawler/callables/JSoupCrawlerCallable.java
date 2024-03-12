@@ -62,13 +62,18 @@ public class JSoupCrawlerCallable implements Callable<Set<String>> {
                     : url;
             // tratativa se a url contem https://
             // Document document = Jsoup.connect(newUrl).get();
-            Document document = Jsoup.parse(driver.getPageSource());
             driver.get(newUrl);
-            Elements links = document.select("a[href~=^.*" + filteredText + ".*]");
-            driver.quit();
+            Document document = Jsoup.parse(driver.getPageSource());
+            // feito o ajuste para pegar os links que começam com o dominio do site, por ser
+            // que altere em outros lugares
+            // mas isso impede de buscar links como /login?redirect="dominio.com.br", talvez
+            // validar melhor como ser feito
+            // Elements links = document.select("a[href~=^.*" + filteredText + ".*]");
+            Elements links = document.select("a[href~=^" + filteredText + ".*]");
             Set<String> newLinks = links.stream().map((elementLink) -> elementLink.attr("href"))
                     .filter(UrlUtils::isUrlValid)
                     .collect(Collectors.toSet());
+            driver.quit();
             kafkaProducer.sendMessage(url);
             return newLinks;
         } /*
