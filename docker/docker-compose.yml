@@ -30,19 +30,36 @@ services:
     networks:
       - webcrawler
 
-  postgresclassifier:
-    image: postgres:14.3
-    container_name: postgres_classifier
+  #postgresclassifier:
+  #image: postgres:14.3
+  #container_name: postgres_classifier
+  #restart: always
+  #environment:
+  #- POSTGRES_USER=root
+  #- POSTGRES_PASSWORD=root
+  #- POSTGRES_DB=webcrawlerclassifier
+  #ports:
+  #- "5434:5432"
+  #volumes:
+  #- ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+  #- postgres_classifier:/var/lib/postgresql/data
+  #networks:
+  #- webcrawler
+
+  mongodbclassifier:
+    image: mongo:7.0.6
     restart: always
+    container_name: mongodb_classifier
     environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=webcrawlerclassifier
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_ROOT_DATABASE: webcrawlerclassifier
     ports:
-      - "5434:5432"
+      - "27017:27017"
     volumes:
-      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - postgres_classifier:/var/lib/postgresql/data
+      - ./nosql:/docker-entrypoint-initdb.d
+      - mongodb_classifier:/data/db
+      - mongodb_classifier:/var/log/mongodb
     networks:
       - webcrawler
 
@@ -83,7 +100,9 @@ volumes:
     driver: local
   postgres_consumer:
     driver: local
-  postgres_classifier:
+  #postgres_classifier:
+  #driver: local
+  mongodb_classifier:
     driver: local
   zookeeper_data:
     driver: local

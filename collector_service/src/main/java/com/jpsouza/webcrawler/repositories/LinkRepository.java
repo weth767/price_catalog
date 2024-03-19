@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jpsouza.webcrawler.models.Link;
 
@@ -27,6 +28,7 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
     boolean existsByUrlIgnoreCaseAndVerifiedInBefore(@NonNull String url, @Nullable LocalDateTime verifiedIn);
 
     @Modifying
-    @Query(value = "update table links set verified = false", nativeQuery = true)
+    @Query(value = "update link set verified = false", nativeQuery = true)
+    @Transactional
     void resetAllLinks();
 }

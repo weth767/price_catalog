@@ -10,15 +10,11 @@ import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import com.jpsouza.webcrawler.kafka.KafkaProducer;
 import com.jpsouza.webcrawler.services.LinkService;
 import com.jpsouza.webcrawler.utils.UrlUtils;
-
-import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class JSoupCrawlerCallable implements Callable<Set<String>> {
     private static final Logger LOGGER = LogManager.getLogger(JSoupCrawlerCallable.class);
@@ -42,20 +38,32 @@ public class JSoupCrawlerCallable implements Callable<Set<String>> {
         try {
             // tratativa para os sites onde os links de produtos, não contém a URL base do
             // mesmo
-            WebDriverManager.chromedriver().setup();
-            ChromeOptions options = new ChromeOptions();
-            options.setHeadless(false);
-            options.addArguments("start-maximized"); // open Browser in maximized mode
-            options.addArguments("disable-infobars"); // disabling infobars
-            options.addArguments("--disable-extensions"); // disabling extensions
-            options.addArguments("--disable-gpu"); // applicable to Windows os only
-            options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
-            options.addArguments("--no-sandbox"); // Bypass OS security model
-            options.addArguments("--disable-in-process-stack-traces");
-            options.addArguments("--disable-logging");
-            options.addArguments("--log-level=3");
-            options.addArguments("--remote-allow-origins=*");
-            WebDriver driver = new ChromeDriver(options);
+            /*
+             * WebDriverManager.chromedriver().clearDriverCache();
+             * WebDriverManager.chromedriver().clearResolutionCache();
+             * WebDriverManager.chromedriver().setup();
+             */
+            /*
+             * ChromeOptions options = new ChromeOptions();
+             * options.addArguments("--headless");
+             * options.addArguments("--window-size=1920,1080"); // Execução em modo headless
+             * options.addArguments("--disable-extensions"); // disabling extensions
+             * options.addArguments("--disable-gpu"); // applicable to Windows os only
+             * options.addArguments("--disable-dev-shm-usage"); // overcome limited resource
+             * problems
+             * options.addArguments("--no-sandbox"); // Bypass OS security model
+             * options.addArguments("--disable-in-process-stack-traces");
+             * options.addArguments("--disable-logging");
+             * options.addArguments("--log-level=3");
+             * options.addArguments("--remote-allow-origins=*");
+             */
+            HtmlUnitDriver driver = new HtmlUnitDriver();
+            driver.setJavascriptEnabled(true);
+            driver.getWebClient().getOptions().setCssEnabled(false);
+            driver.getWebClient().getOptions().setJavaScriptEnabled(true);
+            driver.getWebClient().getOptions().setThrowExceptionOnScriptError(false);
+            driver.getWebClient().getOptions().setThrowExceptionOnFailingStatusCode(false);
+            driver.getWebClient().getOptions().setPrintContentOnFailingStatusCode(false);
             String newUrl = url.startsWith("/") && !url.contains(filteredText)
                     ? (filteredText.endsWith("/") ? filteredText.substring(0, filteredText.length() - 1) : filteredText)
                             + url
@@ -63,6 +71,12 @@ public class JSoupCrawlerCallable implements Callable<Set<String>> {
             // tratativa se a url contem https://
             // Document document = Jsoup.connect(newUrl).get();
             driver.get(newUrl);
+            /*
+             * WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+             * wait.until((ExpectedCondition<Boolean>) webDriver -> ((JavascriptExecutor)
+             * webDriver)
+             * .executeScript("return document.readyState").equals("complete"));
+             */
             Document document = Jsoup.parse(driver.getPageSource());
             // feito o ajuste para pegar os links que começam com o dominio do site, por ser
             // que altere em outros lugares
@@ -76,22 +90,7 @@ public class JSoupCrawlerCallable implements Callable<Set<String>> {
             driver.quit();
             kafkaProducer.sendMessage(url);
             return newLinks;
-        } /*
-           * catch (MalformedURLException malformedURLException) {
-           * System.out.println("URL mal formada, precisa ter https ou http: " + url);
-           * LOGGER.error("URL mal formada, precisa ter https ou http: " + url);
-           * return new HashSet<>();
-           * } catch (HttpStatusException httpStatusException) {
-           * System.out.println("Página não encontrada");
-           * LOGGER.error("Página não encontrada: " + url);
-           * return new HashSet<>();
-           * } catch (UnsupportedMimeTypeException unsupportedMimeTypeException) {
-           * System.out.println("Tipo de dado não suportado");
-           * LOGGER.error("Tipo de dado não suportado { " +
-           * unsupportedMimeTypeException.getMimeType() + " }: " + url);
-           * return new HashSet<>();
-           * }
-           */ catch (Exception exception) {
+        } catch (Exception exception) {
             System.out.println("Erro: " + exception.getMessage());
             LOGGER.error("Erro: " + exception.getMessage());
             return new HashSet<>();

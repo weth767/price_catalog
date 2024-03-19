@@ -21,7 +21,7 @@ public class ExplorationController {
     @PostMapping(value = "/start")
     public ResponseEntity<String> startCrawler(@RequestBody ExplorationDataDTO explorationData) {
         try {
-            explorationService.startExploration(explorationData.crawlers, explorationData.links);
+            explorationService.startExploration(explorationData);
             return ResponseEntity.ok("Crawler iniciado com sucesso!");
         } catch (Exception exception) {
             return ResponseEntity.internalServerError()

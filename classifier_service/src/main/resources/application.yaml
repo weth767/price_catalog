@@ -8,15 +8,7 @@ spring:
     remote:
       debug:
         local-port: 8093
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-  datasource:
-    platform: postgres
-    url: jdbc:postgresql://localhost:5434/webcrawlerclassifier
-    username: root
-    password: root
-    driverClassName: org.postgresql.Driver
-    initialization-mode: always
-    continue-on-error: true
+  data:
+    mongodb:
+      uri: mongodb+srv://weth767:Mowo7898#@@pricecatalogontology.vmsesbf.mongodb.net/
+      database: pricecatalogontology

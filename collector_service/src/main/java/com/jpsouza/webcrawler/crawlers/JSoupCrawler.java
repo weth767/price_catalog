@@ -36,9 +36,12 @@ public class JSoupCrawler {
         this.kafkaProducer = kafkaProducer;
     }
 
-    public void startCrawler(int crawlers, Set<String> urls) throws Exception {
+    public void startCrawler(int crawlers, Set<String> urls, boolean reset) throws Exception {
         domainService.upsertAll(urls);
         executorService = Executors.newFixedThreadPool(crawlers);
+        if (reset) {
+            linkService.resetAllLinks();
+        }
         List<Domain> domainList = domainService.findByUrlInOrderByIdAsc(urls);
         for (Domain domain : domainList) {
             explore(domain.url, domain, domain.url);

@@ -1,12 +1,13 @@
 package com.jpsouza.webcrawler.services;
 
-import java.util.Set;
+import java.util.Objects;
 
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.jpsouza.webcrawler.crawlers.JSoupCrawler;
+import com.jpsouza.webcrawler.dtos.ExplorationDataDTO;
 import com.jpsouza.webcrawler.runnables.JsoupCompleteCrawlingRunnable;
 import com.jpsouza.webcrawler.runnables.JsoupCrawlerRunnable;
 
@@ -19,8 +20,9 @@ public class ExplorationService {
     private final JSoupCrawler jSoupCrawler;
     Thread jsoupCrawlerThread;
 
-    public void startExploration(int crawlers, Set<String> urls) {
-        jsoupCrawlerThread = new Thread(new JsoupCrawlerRunnable(jSoupCrawler, crawlers, urls));
+    public void startExploration(ExplorationDataDTO exceptionData) throws Exception {
+        jsoupCrawlerThread = new Thread(new JsoupCrawlerRunnable(jSoupCrawler, exceptionData.crawlers,
+                exceptionData.links, exceptionData.reset));
         jsoupCrawlerThread.start();
     }
 
@@ -32,7 +34,9 @@ public class ExplorationService {
     }
 
     public void stopExploration() {
-        jsoupCrawlerThread.interrupt();
+        if (Objects.nonNull(jsoupCrawlerThread)) {
+            jsoupCrawlerThread.interrupt();
+        }
         jSoupCrawler.stopCrawler();
     }
 }
