@@ -2,6 +2,16 @@ db = db.getSiblingDB("admin");
 db.auth("root", "root");
 db = db.getSiblingDB("webcrawlerclassifier");
 db.createCollection("products");
+db.createUser({
+  user: "admin",
+  pwd: "admin",
+  roles: [
+    {
+      role: "readWrite",
+      db: "admin",
+    },
+  ],
+});
 db.products.insertMany([
   {
     code: 2259,
@@ -150974,3 +150984,5 @@ db.products.insertMany([
     imageLocalUrl: "./images/cerveja_patagonia_weisse_740ml.jpg",
   },
 ]);
+db.products.createIndex({ description: "text" });
+db.products.createIndex({ "brand.description": "text" });

@@ -1,6 +1,8 @@
 server:
   port: 8083
 spring:
+  datasource:
+
   devtools:
     restart:
       poll-interval: 2s
@@ -10,5 +12,4 @@ spring:
         local-port: 8093
   data:
     mongodb:
-      uri: mongodb+srv://weth767:Mowo7898#@@pricecatalogontology.vmsesbf.mongodb.net/
-      database: pricecatalogontology
+      uri: mongodb://root:root@localhost:27017/webcrawlerclassifier?authSource=admin
