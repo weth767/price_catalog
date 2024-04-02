@@ -10,9 +10,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,8 +19,6 @@ import com.jpsouza.webcrawler.builders.TagProductDtoBuilder;
 import com.jpsouza.webcrawler.dtos.ProductDTO;
 import com.jpsouza.webcrawler.enums.TagDomain;
 import com.jpsouza.webcrawler.kafka.KafkaProducer;
-
-import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class ProductPageRunnable implements Runnable {
     private final String url;
@@ -37,7 +33,7 @@ public class ProductPageRunnable implements Runnable {
         // Removidas as ocorrencias da seguinte sequencia \\", que atrapalhava na
         // conversão do json
         String json = element.html().replaceAll("\\\\\\\\\"", "");
-        Map<?, ?> schema = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()
+        Map<?, ?> schema = new GsonBuilder().setLenient().setPrettyPrinting().disableHtmlEscaping().create()
                 .fromJson(json, Map.class);
         // verifica se o schema é dividido em vários JSONs
         if (schema.containsKey("@graph")) {
@@ -84,6 +80,7 @@ public class ProductPageRunnable implements Runnable {
 
     private ProductDTO getDataFromTags(Document document) throws IOException {
         ProductDTO product = null;
+        // precisa aprimorar com talvez, alguma IA que valide melhor as tags
         if (this.url.contains("leroymerlin.com")) {
             product = new TagProductDtoBuilder(document, this.url, TagDomain.LEROYMERLIN).name().image().description()
                     .brand().price()
@@ -95,19 +92,29 @@ public class ProductPageRunnable implements Runnable {
     @Override
     public void run() {
         try {
-            WebDriverManager.chromedriver().setup();
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("start-maximized"); // open Browser in maximized mode
-            options.addArguments("disable-infobars"); // disabling infobars
-            options.addArguments("--disable-extensions"); // disabling extensions
-            options.addArguments("--disable-gpu"); // applicable to Windows os only
-            options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
-            options.addArguments("--no-sandbox"); // Bypass OS security model
-            options.addArguments("--disable-in-process-stack-traces");
-            options.addArguments("--disable-logging");
-            options.addArguments("--log-level=3");
-            options.addArguments("--remote-allow-origins=*");
-            WebDriver driver = new ChromeDriver(options);
+            /*
+             * WebDriverManager.chromedriver().setup();
+             * ChromeOptions options = new ChromeOptions();
+             * options.addArguments("start-maximized"); // open Browser in maximized mode
+             * options.addArguments("disable-infobars"); // disabling infobars
+             * options.addArguments("--disable-extensions"); // disabling extensions
+             * options.addArguments("--disable-gpu"); // applicable to Windows os only
+             * options.addArguments("--disable-dev-shm-usage"); // overcome limited resource
+             * problems
+             * options.addArguments("--no-sandbox"); // Bypass OS security model
+             * options.addArguments("--disable-in-process-stack-traces");
+             * options.addArguments("--disable-logging");
+             * options.addArguments("--log-level=3");
+             * options.addArguments("--remote-allow-origins=*");
+             */
+            // WebDriver driver = new ChromeDriver(options);
+            HtmlUnitDriver driver = new HtmlUnitDriver();
+            driver.setJavascriptEnabled(false);
+            driver.getWebClient().getOptions().setCssEnabled(false);
+            driver.getWebClient().getOptions().setJavaScriptEnabled(false);
+            driver.getWebClient().getOptions().setThrowExceptionOnScriptError(false);
+            driver.getWebClient().getOptions().setThrowExceptionOnFailingStatusCode(false);
+            driver.getWebClient().getOptions().setPrintContentOnFailingStatusCode(false);
             driver.get(url);
             Document document = Jsoup.parse(driver.getPageSource());
             ProductDTO productDTO = getData(document);
