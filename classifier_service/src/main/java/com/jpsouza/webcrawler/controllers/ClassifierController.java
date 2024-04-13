@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping(value = "/classifier")
 @RequiredArgsConstructor
 public class ClassifierController {
+
     @PostMapping("")
     public ResponseEntity<?> startAnalysis(@RequestBody PossibleProductDTO possibleProduct) {
         MongoTemplate template = new MongoConfig().mongoTemplate();
@@ -39,4 +40,5 @@ public class ClassifierController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

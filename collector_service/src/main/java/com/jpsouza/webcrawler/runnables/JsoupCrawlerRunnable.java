@@ -22,7 +22,7 @@ public class JsoupCrawlerRunnable implements Runnable {
         try {
             this.jSoupCrawler.startCrawler(this.crawlers, this.urls, this.reset);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.out.println(e);
         }
     }
 }

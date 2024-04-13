@@ -15,7 +15,7 @@ public class Product {
     private int code;
     private BigDecimal price;
     private String imageUrl;
-    private Brand brand;
+    private BrandProduct brand;
     private String description;
     private double score;
 }

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.jpsouza.webcrawler.mappers.ResponseProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +15,7 @@ import com.jpsouza.webcrawler.dtos.ProductDTO;
 import com.jpsouza.webcrawler.dtos.ResponseProductDTO;
 import com.jpsouza.webcrawler.enums.ProductStatus;
 import com.jpsouza.webcrawler.feign.ClassifierFeignClient;
+import com.jpsouza.webcrawler.mappers.ResponseProductMapper;
 import com.jpsouza.webcrawler.models.FeignClientProduct;
 import com.jpsouza.webcrawler.models.Product;
 import com.jpsouza.webcrawler.models.ProductPrice;
@@ -32,21 +32,13 @@ public class ProductService {
     private final ClassifierFeignClient classifierFeignClient;
 
     public void getNewProduct(ProductDTO product) {
-        // verificar se o produto existe na base, caso não exista perguntar ao usuário
-        // se ele quer adicionar
-        // se existir, atualizar o preço, a data e o local(site)
-        // se não existir, criar na base de ontologia e nesse base de registro, e anexar
-        // o primeiro preço.
         FeignClientProduct feignClientProduct = classifierFeignClient.startAnalysis(product);
         if (feignClientProduct != null) {
             saveProduct(feignClientProduct, product);
+        } else {
+            // cria o produto na base de ontologia e na base de registro de preço, como seu
+            // primeiro preço
         }
-        System.out.println(feignClientProduct);
-        // validações de dados, que façam sentido
-        // verificações antologicas(na base de antologia do outro microserviço)
-        // verifica se existe, se sim atualiza apenas o preço e a data
-        // senão cria o produto e insere o primeiro preço
-        // saveProduct(product);
     }
 
     private void saveProduct(FeignClientProduct feignClientProduct, ProductDTO product) {

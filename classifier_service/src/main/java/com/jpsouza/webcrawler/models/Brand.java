@@ -1,16 +1,16 @@
 package com.jpsouza.webcrawler.models;
 
-import java.util.List;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import org.springframework.data.mongodb.core.mapping.DBRef;
-
+import jakarta.persistence.Id;
 import lombok.Data;
 
 @Data
+@Document(collection = "brands")
 public class Brand {
-    private int id;
+    @Id
+    private String id;
     private int code;
     private String description;
-    @DBRef
-    private List<Product> products;
+    private double score;
 }

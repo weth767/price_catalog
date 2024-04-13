@@ -1,8 +1,8 @@
 package com.jpsouza.webcrawler.dtos;
 
-import lombok.Data;
 import java.math.BigDecimal;
 
+import lombok.Data;
 
 @Data
 public class PossibleProductDTO {
@@ -12,4 +12,8 @@ public class PossibleProductDTO {
     private String imageUrl;
     private BigDecimal price;
     private String url;
+    private String availability;
+    private String currency;
+    private String category;
+    private String condition;
 }

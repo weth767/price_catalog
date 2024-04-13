@@ -60,10 +60,13 @@ public class JSoupCrawlerCallable implements Callable<Set<String>> {
             HtmlUnitDriver driver = new HtmlUnitDriver();
             driver.setJavascriptEnabled(true);
             driver.getWebClient().getOptions().setCssEnabled(false);
-            driver.getWebClient().getOptions().setJavaScriptEnabled(true);
+            driver.getWebClient().getOptions().setJavaScriptEnabled(false);
             driver.getWebClient().getOptions().setThrowExceptionOnScriptError(false);
             driver.getWebClient().getOptions().setThrowExceptionOnFailingStatusCode(false);
             driver.getWebClient().getOptions().setPrintContentOnFailingStatusCode(false);
+            driver.getWebClient().getOptions().setRedirectEnabled(false);
+            driver.getWebClient().getOptions().setTimeout(5000);
+            driver.getWebClient().getOptions().setDownloadImages(false);
             String newUrl = url.startsWith("/") && !url.contains(filteredText)
                     ? (filteredText.endsWith("/") ? filteredText.substring(0, filteredText.length() - 1) : filteredText)
                             + url

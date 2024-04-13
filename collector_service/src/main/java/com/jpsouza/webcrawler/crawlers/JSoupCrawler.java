@@ -44,7 +44,21 @@ public class JSoupCrawler {
         }
         List<Domain> domainList = domainService.findByUrlInOrderByIdAsc(urls);
         for (Domain domain : domainList) {
+            // melhorar a logica das threds para permitir que vários dominios sejam
+            // analisados ao mesmo tempo
             explore(domain.url, domain, domain.url);
+            /*
+             * (new Thread() {
+             * public void run() {
+             * try {
+             * explore(domain.url, domain, domain.url);
+             * } catch (Exception e) {
+             * e.printStackTrace();
+             * }
+             * }
+             * }).run();
+             */
+
         }
     }
 
@@ -80,6 +94,18 @@ public class JSoupCrawler {
         // salva os links encontrados dentro da página da url testada
         linkService.upsertLinks(links, domain);
         for (String link : links) {
+            // melhorar a logica das
+            /*
+             * (new Thread() {
+             * public void run() {
+             * try {
+             * explore(link, domain, filteredText);
+             * } catch (Exception e) {
+             * e.printStackTrace();
+             * }
+             * }
+             * }).run();
+             */
             explore(link, domain, filteredText);
         }
     }
