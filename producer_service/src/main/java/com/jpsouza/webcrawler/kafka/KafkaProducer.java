@@ -16,7 +16,7 @@ public class KafkaProducer {
     @Value("${spring.kafka.topics.products}")
     private String topic;
 
-    public void sendMessage(String message){
+    public void sendMessage(String message) {
         LOGGER.info(String.format("Produto enviado: %s", message));
         kafkaTemplate.send(topic, message);
     }

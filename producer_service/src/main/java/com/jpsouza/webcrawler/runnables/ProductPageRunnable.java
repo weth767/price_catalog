@@ -12,8 +12,10 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jpsouza.webcrawler.builders.SchemaNextProductDtoBuilder;
 import com.jpsouza.webcrawler.builders.SchemaProductDtoBuilder;
 import com.jpsouza.webcrawler.builders.TagProductDtoBuilder;
 import com.jpsouza.webcrawler.dtos.ProductDTO;
@@ -65,6 +67,40 @@ public class ProductPageRunnable implements Runnable {
         return null;
     }
 
+    private ProductDTO getDataFromSchemaNext(Element element) {
+        String json = element.html().replaceAll("\\\\\\\\\"", "");
+        Map<?, ?> schema = new GsonBuilder().setLenient().setPrettyPrinting().disableHtmlEscaping().create()
+                .fromJson(json, Map.class);
+        if (!schema.containsKey("props")) {
+            return null;
+        }
+        Map<?, ?> props = (Map<?, ?>) schema.get("props");
+        if (!props.containsKey("initialState")) {
+            return null;
+        }
+        Map<?, ?> initialState = (Map<?, ?>) props.get("initialState");
+        if (!initialState.containsKey("Product") || !initialState.containsKey("ProductPrice")) {
+            return null;
+        }
+        Map<?, ?> product = (Map<?, ?>) initialState.get("Product");
+        Map<?, ?> productPrice = (Map<?, ?>) initialState.get("ProductPrice");
+        if (!product.containsKey("product")) {
+            return null;
+        }
+        SchemaNextProductDtoBuilder builder = new SchemaNextProductDtoBuilder(product, productPrice, url);
+        return builder
+                .imageUrl()
+                .name()
+                .description()
+                .brand()
+                .category()
+                .price()
+                .availability()
+                .condition()
+                .currency()
+                .build();
+    }
+
     private ProductDTO getData(Document document) throws IOException {
         ProductDTO product = null;
         Elements elements = document.select("script[type=application/ld+json]");
@@ -72,12 +108,29 @@ public class ProductPageRunnable implements Runnable {
             Element schema = elements.first();
             product = getDataFromSchema(schema);
         }
-        if (Objects.isNull(product)) {
-            product = getDataFromTags(document);
+        // ler script baseado na "after interactive" do nextjs, onde o script é exibido
+        // de outra maneira porque o script do schema só é carregado de fato após a
+        // hidratação
+        if (Objects.nonNull(product)) {
+            return product;
+        }
+        elements = document.select("script[type=application/json]");
+        if (!elements.isEmpty()) {
+            Element schema = elements.first();
+            product = getDataFromSchemaNext(schema);
         }
         return product;
     }
 
+    /**
+     * Não será mais utilizada a busca via tags, porque como cada página tem suas
+     * próprias tags, não vale a pena validar isso
+     * 
+     * @param document
+     * @return
+     * @throws IOException
+     */
+    @Deprecated(since = "19/04/2024")
     private ProductDTO getDataFromTags(Document document) throws IOException {
         ProductDTO product = null;
         // precisa aprimorar com talvez, alguma IA que valide melhor as tags
@@ -89,43 +142,44 @@ public class ProductPageRunnable implements Runnable {
         return product;
     }
 
+    private HtmlUnitDriver getDriver(boolean acceptRedirect) {
+        HtmlUnitDriver driver = new HtmlUnitDriver(BrowserVersion.BEST_SUPPORTED, true);
+        driver.getWebClient().getOptions().setCssEnabled(false);
+        driver.getWebClient().getOptions().setJavaScriptEnabled(false);
+        driver.getWebClient().getOptions().setThrowExceptionOnScriptError(false);
+        driver.getWebClient().getOptions().setThrowExceptionOnFailingStatusCode(false);
+        driver.getWebClient().getOptions().setPrintContentOnFailingStatusCode(false);
+        driver.getWebClient().getOptions().setRedirectEnabled(acceptRedirect);
+        driver.getWebClient().getOptions().setTimeout(10000);
+        driver.getWebClient().getOptions().setDownloadImages(false);
+        driver.getWebClient().waitForBackgroundJavaScript(10000);
+        return driver;
+    }
+
     @Override
     public void run() {
         try {
-            /*
-             * WebDriverManager.chromedriver().setup();
-             * ChromeOptions options = new ChromeOptions();
-             * options.addArguments("start-maximized"); // open Browser in maximized mode
-             * options.addArguments("disable-infobars"); // disabling infobars
-             * options.addArguments("--disable-extensions"); // disabling extensions
-             * options.addArguments("--disable-gpu"); // applicable to Windows os only
-             * options.addArguments("--disable-dev-shm-usage"); // overcome limited resource
-             * problems
-             * options.addArguments("--no-sandbox"); // Bypass OS security model
-             * options.addArguments("--disable-in-process-stack-traces");
-             * options.addArguments("--disable-logging");
-             * options.addArguments("--log-level=3");
-             * options.addArguments("--remote-allow-origins=*");
-             */
-            // WebDriver driver = new ChromeDriver(options);
-            HtmlUnitDriver driver = new HtmlUnitDriver();
-            driver.setJavascriptEnabled(false);
-            driver.getWebClient().getOptions().setCssEnabled(false);
-            driver.getWebClient().getOptions().setJavaScriptEnabled(false);
-            driver.getWebClient().getOptions().setThrowExceptionOnScriptError(false);
-            driver.getWebClient().getOptions().setThrowExceptionOnFailingStatusCode(false);
-            driver.getWebClient().getOptions().setPrintContentOnFailingStatusCode(false);
+            HtmlUnitDriver driver = getDriver(false);
             driver.get(url);
             Document document = Jsoup.parse(driver.getPageSource());
             ProductDTO productDTO = getData(document);
-            if (Objects.isNull(productDTO)) {
+            if (Objects.nonNull(productDTO)) {
+                String json = new Gson().toJson(productDTO);
+                kafkaProducer.sendMessage(json);
+                driver.quit();
                 return;
             }
+            driver = getDriver(true);
+            driver.get(url);
+            document = Jsoup.parse(driver.getPageSource());
+            productDTO = getData(document);
+            if (Objects.nonNull(productDTO)) {
+                String json = new Gson().toJson(productDTO);
+                kafkaProducer.sendMessage(json);
+            }
             driver.quit();
-            String json = new Gson().toJson(productDTO);
-            kafkaProducer.sendMessage(json);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Erro: " + e.getMessage());
         }
     }
 }

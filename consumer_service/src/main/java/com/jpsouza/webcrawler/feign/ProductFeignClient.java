@@ -11,5 +11,5 @@ import com.jpsouza.webcrawler.models.FeignClientProduct;
 @FeignClient(value = "product", url = "http://localhost:8083")
 public interface ProductFeignClient {
     @RequestMapping(method = RequestMethod.POST, value = "/product")
-    FeignClientProduct startAnalysis(@RequestBody ProductDTO product);
+    FeignClientProduct createInexistentProduct(@RequestBody ProductDTO product);
 }

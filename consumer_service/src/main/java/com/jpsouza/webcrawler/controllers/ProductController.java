@@ -27,7 +27,8 @@ public class ProductController {
 
     @GetMapping("")
     public ResponseEntity<Page<ResponseProductDTO>> getProductsPaged(
-            @RequestParam(required = false, defaultValue = "1") int page,
+            // paginação no spring boot começa sempre pelo 0
+            @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
             @RequestParam(required = false, defaultValue = "ASC") Direction direction,
             @RequestParam(required = false, defaultValue = "id") String sort) {

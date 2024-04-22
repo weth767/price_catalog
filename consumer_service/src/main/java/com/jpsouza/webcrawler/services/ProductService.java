@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.jpsouza.webcrawler.dtos.ProductDTO;
 import com.jpsouza.webcrawler.dtos.ResponseProductDTO;
 import com.jpsouza.webcrawler.enums.ProductStatus;
 import com.jpsouza.webcrawler.feign.ClassifierFeignClient;
+import com.jpsouza.webcrawler.feign.ProductFeignClient;
 import com.jpsouza.webcrawler.mappers.ResponseProductMapper;
 import com.jpsouza.webcrawler.models.FeignClientProduct;
 import com.jpsouza.webcrawler.models.Product;
@@ -30,15 +32,15 @@ public class ProductService {
     private final ProductRepository productRepository;
     @Autowired
     private final ClassifierFeignClient classifierFeignClient;
+    @Autowired
+    private final ProductFeignClient productFeignClient;
 
     public void getNewProduct(ProductDTO product) {
         FeignClientProduct feignClientProduct = classifierFeignClient.startAnalysis(product);
-        if (feignClientProduct != null) {
-            saveProduct(feignClientProduct, product);
-        } else {
-            // cria o produto na base de ontologia e na base de registro de preço, como seu
-            // primeiro preço
+        if (Objects.isNull(feignClientProduct)) {
+            feignClientProduct = productFeignClient.createInexistentProduct(product);
         }
+        saveProduct(feignClientProduct, product);
     }
 
     private void saveProduct(FeignClientProduct feignClientProduct, ProductDTO product) {
@@ -67,6 +69,7 @@ public class ProductService {
         newProduct.setId(Long.parseLong(Integer.toString(feignClientProduct.getCode())));
         newProduct.setName(product.getName());
         newProduct.setDescription(product.getDescription());
+        newProduct.setImageUrl(feignClientProduct.getImageUrl());
         productPrice.setProduct(newProduct);
         newProduct.setProductPrices(new ArrayList<>(List.of(productPrice)));
         newProduct.setStatus(ProductStatus.ACTIVE);
