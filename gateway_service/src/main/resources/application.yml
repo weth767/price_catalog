@@ -1,0 +1,38 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+          eureka:
+            uri: http://localhost:8761/eureka/
+      routes:
+        - id: collector-service
+          uri: lb://collector-service
+          predicates:
+            - Path=/collector/**
+          filters:
+            - StripPrefix=1
+        - id: consumer-service
+          uri: lb://consumer-service
+          predicates:
+            - Path=/consumer/**
+          filters:
+            - StripPrefix=1
+        - id: classifier-service
+          uri: lb://classifier-service
+          predicates:
+            - Path=/classifier/**
+          filters:
+            - StripPrefix=1
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
