@@ -1,0 +1,47 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: user-service
+  devtools:
+    restart:
+      poll-interval: 2s
+      quiet-period: 1s
+    remote:
+      debug:
+        local-port: 8095
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    platform: postgres
+    url: jdbc:postgresql://localhost:5435/webcrawlerusers
+    username: root
+    password: root
+    driverClassName: org.postgresql.Driver
+    initialization-mode: always
+    continue-on-error: true
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+feign:
+  httpclient:
+    disableSslValidation: true
+  client:
+    config:
+      default:
+        connectTimeout: 160000000
+        readTimeout: 160000000
+security:
+  jwt:
+    secret-key: 3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b
+    expiration-time: 3600000
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
