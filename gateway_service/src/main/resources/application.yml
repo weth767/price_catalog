@@ -12,24 +12,66 @@ spring:
           eureka:
             uri: http://localhost:8761/eureka/
       routes:
+        - id: producer-service
+          uri: lb://producer-service
+          predicates:
+            - Path=/producer/**
+          filters:
+            - StripPrefix=1
+          metadata:
+            cors:
+              allowedOrigins: '*'
+              allowedMethods: '*'
+              allowedHeaders: '*'
+              maxAge: 30
         - id: collector-service
           uri: lb://collector-service
           predicates:
             - Path=/collector/**
           filters:
             - StripPrefix=1
+          metadata:
+            cors:
+              allowedOrigins: '*'
+              allowedMethods: '*'
+              allowedHeaders: '*'
+              maxAge: 30
         - id: consumer-service
           uri: lb://consumer-service
           predicates:
             - Path=/consumer/**
           filters:
             - StripPrefix=1
+          metadata:
+            cors:
+              allowedOrigins: '*'
+              allowedMethods: '*'
+              allowedHeaders: '*'
+              maxAge: 30
         - id: classifier-service
           uri: lb://classifier-service
           predicates:
             - Path=/classifier/**
           filters:
             - StripPrefix=1
+          metadata:
+            cors:
+              allowedOrigins: '*'
+              allowedMethods: '*'
+              allowedHeaders: '*'
+              maxAge: 30
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=1
+          metadata:
+            cors:
+              allowedOrigins: '*'
+              allowedMethods: '*'
+              allowedHeaders: '*'
+              maxAge: 30
 eureka:
   client:
     service-url:

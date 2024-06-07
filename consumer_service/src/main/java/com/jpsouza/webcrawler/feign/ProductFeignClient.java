@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.jpsouza.webcrawler.dtos.ProductDTO;
 import com.jpsouza.webcrawler.models.FeignClientProduct;
 
-@FeignClient(value = "product", url = "http://localhost:8083")
+@FeignClient(value = "product", url = "${feign.classifier.url}")
 public interface ProductFeignClient {
     @RequestMapping(method = RequestMethod.POST, value = "/product")
     FeignClientProduct createInexistentProduct(@RequestBody ProductDTO product);

@@ -41,8 +41,6 @@ public class SecurityConfiguration {
                 .disable().
                 authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                .requestMatchers(HttpMethod.POST, "/signin/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/signup/**").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()

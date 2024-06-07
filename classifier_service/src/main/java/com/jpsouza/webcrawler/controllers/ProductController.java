@@ -21,8 +21,7 @@ public class ProductController {
     @PostMapping("")
     public ResponseEntity<?> createProductInexistent(@RequestBody PossibleProductDTO possibleProduct) {
         try {
-            productService.createProductInexistent(possibleProduct);
-            return new ResponseEntity<>("Criado com sucesso", HttpStatus.CREATED);
+            return new ResponseEntity<>(productService.createProductInexistent(possibleProduct), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -1,13 +1,15 @@
 server:
-  port: 8082
+  port: 8083
 spring:
+  application:
+    name: consumer-service
   devtools:
     restart:
       poll-interval: 2s
       quiet-period: 1s
     remote:
       debug:
-        local-port: 8092
+        local-port: 8093
   jpa:
     show-sql: true
     hibernate:
@@ -31,3 +33,30 @@ spring:
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     topics:
       products: 6bb2322a221e8674e135be0a38698e94839900197a60e442b4a1e63e3256c40e
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+feign:
+  httpclient:
+    disableSslValidation: true
+  client:
+    config:
+      default:
+        connectTimeout: 160000000
+        readTimeout: 160000000
+  classifier:
+    url: localhost:8080/classifier
+  user:
+    url: localhost:8080/user
+security:
+  jwt:
+    secret-key: 0cfa66a2831fa1659ac22cad8fd1063c502b20ff5554701f8f0224a5273d7234
+    expiration-time-in-seconds: 86400
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG

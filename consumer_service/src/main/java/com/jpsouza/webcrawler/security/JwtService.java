@@ -19,7 +19,7 @@ public class JwtService {
     @Value("${security.jwt.secret-key}")
     private String secretKey;
 
-    @Value("${security.jwt.expiration-time}")
+    @Value("${security.jwt.expiration-time-in-seconds}")
     private long jwtExpiration;
 
     public String extractUsername(String token) {
@@ -48,12 +48,14 @@ public class JwtService {
             UserDetails userDetails,
             long expiration
     ) {
+        //expiration vem em segundos, precisa ser convertida em milisegundos
+        long expirationInMilliseconds = expiration * 1000;
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationInMilliseconds))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

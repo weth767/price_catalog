@@ -4,7 +4,6 @@ import com.jpsouza.webcrawler.dtos.LoginFormDTO;
 import com.jpsouza.webcrawler.dtos.RegisterUserFormDTO;
 import com.jpsouza.webcrawler.models.Role;
 import com.jpsouza.webcrawler.models.User;
-import com.jpsouza.webcrawler.repositories.UserRepository;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final UserRepository userRepository;
+    private final UserService userService;
     @Autowired
     private final PasswordEncoder passwordEncoder;
     @Autowired
@@ -36,7 +35,7 @@ public class AuthenticationService {
         user.setUsername(registerUser.getUsername());
         Optional<Role> optionalRole = roleService.getMemberRole();
         optionalRole.ifPresent(role -> user.setRoles(new HashSet<>(List.of(role))));
-        return userRepository.save(user);
+        return userService.save(user);
     }
 
     public User login(LoginFormDTO loginForm) {
@@ -46,8 +45,7 @@ public class AuthenticationService {
                         loginForm.getPassword()
                 )
         );
-        System.out.println(authentication);
-        return userRepository.findByEmail(loginForm.getEmail())
+        return userService.findByEmail(loginForm.getEmail())
                 .orElseThrow();
     }
 }

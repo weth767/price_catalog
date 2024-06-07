@@ -34,7 +34,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-                http
+        http
                 .cors()
                 .and()
                 .csrf()
@@ -43,6 +43,8 @@ public class SecurityConfiguration {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers(HttpMethod.POST, "/signin/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/signup/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/by-email/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/by-username/**").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()

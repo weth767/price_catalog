@@ -23,7 +23,7 @@ public class ProductsTopicListener {
     @KafkaListener(topics = "${spring.kafka.topics.products}", groupId = "webcrawler")
     public void consume(ConsumerRecord<String, String> payload) {
         log.info("product: {}", payload.value());
-        productService.getNewProduct(new GsonBuilder().setLenient().setPrettyPrinting().disableHtmlEscaping().create()
+        productService.getProduct(new GsonBuilder().setLenient().setPrettyPrinting().disableHtmlEscaping().create()
                 .fromJson(payload.value(), ProductDTO.class));
     }
 }

@@ -7,7 +7,6 @@ import com.jpsouza.webcrawler.models.User;
 import com.jpsouza.webcrawler.security.JwtService;
 import com.jpsouza.webcrawler.services.AuthenticationService;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,7 +31,7 @@ public class SignInController {
         String jwtToken = jwtService.generateToken(authenticatedUser);
         UserResponseDTO userResponse = new UserResponseDTO();
         userResponse.setToken(jwtToken);
-        userResponse.setExpiresIn(LocalDateTime.now().plus(jwtService.getExpirationTime(), ChronoUnit.MILLIS));
+        userResponse.setExpiresIn(LocalDateTime.now().plusSeconds(jwtService.getExpirationTime()));
         userResponse.setRoles(authenticatedUser.getRoles().stream().map((role) ->
                 new ResponseRoleDTO(role.getId(), role.getName())).collect(Collectors.toSet()));
         return new ResponseEntity<>(userResponse, HttpStatus.OK);

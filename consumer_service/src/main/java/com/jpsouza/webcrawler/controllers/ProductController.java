@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import com.jpsouza.webcrawler.services.ProductService;
 
 import lombok.RequiredArgsConstructor;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping(value = "/product")
 @RequiredArgsConstructor
@@ -25,7 +27,7 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<Page<ResponseProductDTO>> getProductsPaged(
             // paginação no spring boot começa sempre pelo 0
             @RequestParam(required = false, defaultValue = "0") int page,
@@ -36,9 +38,8 @@ public class ProductController {
         return new ResponseEntity<>(productService.getProductsPaged(pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/:id")
-    public ResponseEntity<ResponseProductDTO> getProductById(
-            @PathVariable("id") Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseProductDTO> getProductById(@PathVariable Long id) {
         return new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK);
     }
 }

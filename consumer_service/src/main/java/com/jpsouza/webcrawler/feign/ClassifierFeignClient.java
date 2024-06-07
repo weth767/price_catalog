@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.jpsouza.webcrawler.dtos.ProductDTO;
 import com.jpsouza.webcrawler.models.FeignClientProduct;
 
-@FeignClient(value = "classifier", url = "http://localhost:8083")
+@FeignClient(value = "classifier", url = "${feign.classifier.url}")
 public interface ClassifierFeignClient {
     @RequestMapping(method = RequestMethod.POST, value = "/classifier")
     FeignClientProduct startAnalysis(@RequestBody ProductDTO product);

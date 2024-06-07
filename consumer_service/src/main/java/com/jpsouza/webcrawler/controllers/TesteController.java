@@ -1,5 +1,6 @@
 package com.jpsouza.webcrawler.controllers;
 
+import com.jpsouza.webcrawler.models.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +20,7 @@ public class TesteController {
     private final ProductService productService;
 
     @PostMapping()
-    public ResponseEntity<?> verifyProduct(@RequestBody ProductDTO product) {
-        productService.getNewProduct(product);
-        return new ResponseEntity<String>("Teste", HttpStatus.OK);
+    public ResponseEntity<Product> verifyProduct(@RequestBody ProductDTO product) {
+        return new ResponseEntity<>(productService.getProduct(product), HttpStatus.OK);
     }
 }

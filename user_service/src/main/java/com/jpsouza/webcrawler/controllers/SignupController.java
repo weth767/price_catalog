@@ -2,7 +2,6 @@ package com.jpsouza.webcrawler.controllers;
 
 import com.jpsouza.webcrawler.dtos.RegisterUserFormDTO;
 import com.jpsouza.webcrawler.models.User;
-import com.jpsouza.webcrawler.security.JwtService;
 import com.jpsouza.webcrawler.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -16,6 +16,10 @@ clean_install_producer:
 	@echo "Executing clean install in Producer service"
 	@cd producer_service && .\mvnw clean install
 
+clean_install_user:
+	@echo "Executing clean install in User service"
+	@cd user_service && .\mvnw clean install
+
 clean_install_all:
 	@echo "Executing clean install"
 	@cd classifier_service && .\mvnw clean install
@@ -42,6 +46,18 @@ run_consumer:
 run_producer:
 	@echo "Running Producer service"
 	@cd producer_service && .\mvnw spring-boot:run
+
+run_user:
+	@echo "Running User service"
+	@cd user_service && .\mvnw spring-boot:run
+
+run_eureka:
+	@echo "Running Eureka service"
+	@cd eureka_service && .\mvnw spring-boot:run
+
+run_gateway:
+	@echo "Running Gateway service"
+	@cd gateway_service && .\mvnw spring-boot:run
 
 run_all:
 	@echo "Running all microservices"

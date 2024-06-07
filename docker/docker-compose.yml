@@ -30,21 +30,21 @@ services:
     networks:
       - webcrawler
 
-  #postgresclassifier:
-  #image: postgres:14.3
-  #container_name: postgres_classifier
-  #restart: always
-  #environment:
-  #- POSTGRES_USER=root
-  #- POSTGRES_PASSWORD=root
-  #- POSTGRES_DB=webcrawlerclassifier
-  #ports:
-  #- "5434:5432"
-  #volumes:
-  #- ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
-  #- postgres_classifier:/var/lib/postgresql/data
-  #networks:
-  #- webcrawler
+  postgresusers:
+    image: postgres:14.3
+    container_name: postgres_user
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=webcrawlerusers
+    ports:
+      - "5435:5432"
+    volumes:
+      - ./sql/init_users.sql:/docker-entrypoint-initdb.d/init_users.sql
+      - postgres_users:/var/lib/postgresql/data
+    networks:
+      - webcrawler
 
   mongodbclassifier:
     image: mongo:7.0.6
@@ -99,6 +99,8 @@ volumes:
   postgres_producer:
     driver: local
   postgres_consumer:
+    driver: local
+  postgres_users:
     driver: local
   #postgres_classifier:
   #driver: local

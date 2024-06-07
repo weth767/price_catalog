@@ -5,7 +5,7 @@ import org.mapstruct.Mapper;
 import com.jpsouza.webcrawler.dtos.ResponseProductDTO;
 import com.jpsouza.webcrawler.models.Product;
 
-@Mapper(uses = ResponseProductPriceMapper.class)
+@Mapper(uses = {ResponseProductPriceMapper.class, ResponseBrandMapper.class})
 public interface ResponseProductMapper {
     ResponseProductDTO productToResponseProductDTO(Product product);
 }
