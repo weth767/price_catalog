@@ -1,0 +1,20 @@
+<a [href]="'/produtos/' + product.id" class="text-gray-900 no-underline">
+  <mat-card (click)="onClick.emit()">
+    <div class="flex flex-col h-[350px] w-[200px] p-4">
+      <img
+        [id]="'productImage_' + product.id"
+        class="w-full scale-50"
+        [alt]="'Imagem do produto ' + product.description"
+        src="/assets/box.png"
+      />
+      <span class="!line-clamp-3 h-16 text-ellipsis text-sm">{{
+        product.description
+      }}</span>
+      <span class="text-sm mb-4">{{
+        product.productPrices![product.productPrices!.length - 1].price
+          | currency : "BRL"
+      }}</span>
+      <span class="text-xs">{{ "Marca: " + product.brand?.description }}</span>
+    </div>
+  </mat-card>
+</a>

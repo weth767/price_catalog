@@ -1,6 +1,6 @@
 package com.jpsouza.webcrawler.security;
 
-import com.jpsouza.webcrawler.repositories.UserRepository;
+import com.jpsouza.webcrawler.feign.UserFeignClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,17 +12,17 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
-public class CustomSecurityConfiguration {
-    private final UserRepository userRepository;
+public class SecurityProvider {
+    private final UserFeignClient userFeignClient;
 
-    public CustomSecurityConfiguration(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public SecurityProvider(UserFeignClient userFeignClient) {
+        this.userFeignClient = userFeignClient;
     }
 
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> userRepository.findByEmail(username)
-                .or(() -> userRepository.findByUsername(username))
+        return username -> userFeignClient.findByEmail(username)
+                .or(() -> userFeignClient.findByUsername(username))
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
     }
 
