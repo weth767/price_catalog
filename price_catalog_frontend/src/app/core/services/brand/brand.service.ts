@@ -9,7 +9,7 @@ import { Page } from '../../models/page';
   providedIn: 'root',
 })
 export class BrandService {
-  private readonly url = environment.baseUrl;
+  private readonly url = `${environment.baseUrl}/consumer`;
   constructor(private http: HttpClient) {}
 
   public getCountedBrandsPage(

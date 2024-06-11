@@ -1,0 +1,63 @@
+<div
+  class="w-full min-h-screen bg-blue-500 flex flex-col justify-center items-center md:p-0 p-4"
+>
+  <section
+    class="md:w-[600px] w-full h-[800px] p-8 flex flex-col justify-center items-center bg-white border-blue-gray-700 border rounded shadow-sm shadow-gray-300"
+  >
+    <div class="flex items-center mb-6 text-2xl font-semibold text-gray-900">
+      <img class="w-8 h-8 mr-2" src="/assets/logo.png" alt="logo" />
+      Price Catalog
+    </div>
+    <h1
+      class="text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl"
+    >
+      Cria sua conta
+    </h1>
+    <form class="w-full flex flex-col gap-4">
+      <mat-form-field appearance="outline">
+        <mat-label class="text-blue-gray-700">E-mail</mat-label>
+        <input class="text-blue-gray-700" matInput type="email" />
+        <mat-error></mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label class="text-blue-gray-700">Username</mat-label>
+        <input class="text-blue-gray-700" matInput />
+        <mat-error></mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label class="text-blue-gray-700">Nome</mat-label>
+        <input class="text-blue-gray-700" matInput />
+        <mat-error></mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label class="text-blue-gray-700">Celular</mat-label>
+        <input class="text-blue-gray-700" matInput />
+        <mat-error></mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label class="text-blue-gray-700">Senha</mat-label>
+        <input class="text-blue-gray-700" matInput />
+        <mat-error></mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label class="text-blue-gray-700">Confirmar senha</mat-label>
+        <input class="text-blue-gray-700" matInput />
+        <mat-error></mat-error>
+      </mat-form-field>
+      <button
+        type="submit"
+        class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+      >
+        Criar conta
+      </button>
+      <p class="text-sm font-light text-blue-gray-700">
+        Já tem uma conta? Conecte-se.
+        <a
+          href="/usuario/login"
+          class="font-medium text-blue-600 hover:underline"
+          >Já tenho uma conta</a
+        >
+      </p>
+    </form>
+  </section>
+</div>

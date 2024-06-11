@@ -1,0 +1,12 @@
+.custom-dialog {
+  font-size: 1.5rem;
+
+  .p-dialog .p-dialog-header .p-dialog-header-icon {
+    color: var(--text) !important;
+    font-size: 3rem !important;
+  }
+
+  .p-dialog .p-dialog-header .p-dialog-header-icon:focus {
+    box-shadow: 0 0 0 1px var(--text) !important;
+  }
+}

@@ -83,3 +83,21 @@ body {
     width: 1.25em;
   }
 }
+
+.mdc-checkbox
+  .mdc-checkbox__native-control:enabled:checked
+  ~ .mdc-checkbox__background,
+.mdc-checkbox
+  .mdc-checkbox__native-control:enabled:indeterminate
+  ~ .mdc-checkbox__background,
+.mdc-checkbox
+  .mdc-checkbox__native-control[data-indeterminate="true"]:enabled
+  ~ .mdc-checkbox__background {
+  border-color: rgb(63 131 248) !important;
+  background-color: rgb(63 131 248) !important;
+}
+
+.mat-mdc-checkbox-ripple,
+.mat-mdc-checkbox .mdc-checkbox__ripple {
+  display: none !important;
+}

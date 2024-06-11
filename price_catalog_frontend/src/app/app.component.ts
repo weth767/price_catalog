@@ -7,15 +7,9 @@ import { initFlowbite } from 'flowbite';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  sidebarVisible = false;
-
   constructor() {}
 
   ngOnInit() {
     initFlowbite();
-  }
-
-  public openOrCloseSideBar(): void {
-    this.sidebarVisible = !this.sidebarVisible;
   }
 }

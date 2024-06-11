@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { AngularMaterialModule } from '../angular-material.module';
 import { PrimeNgModule } from '../prime-ng.module';
+import { CustomDialogComponent } from './components/custom-dialog/custom-dialog.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { NavitemComponent } from './components/navbar/components/navitem/navitem.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -19,6 +20,7 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
     NavitemComponent,
     SearchFieldComponent,
     ProductCardComponent,
+    CustomDialogComponent,
   ],
   imports: [CommonModule, AngularMaterialModule, PrimeNgModule],
   exports: [

@@ -9,7 +9,7 @@ import { Product } from '../models/product';
   providedIn: 'root',
 })
 export class ProductService {
-  private readonly url = environment.baseUrl;
+  private readonly url = `${environment.baseUrl}/consumer`;
   constructor(private http: HttpClient) {}
 
   public getProducts(

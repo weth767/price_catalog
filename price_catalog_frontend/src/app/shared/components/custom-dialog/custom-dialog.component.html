@@ -1,0 +1,21 @@
+<div [class]="wrapperClass">
+  <span [class]="textClass"> {{ config.data?.text }} </span>
+  <div [class]="buttonsClass">
+    <button
+      mat-raised-button
+      (click)="confirm()"
+      class="!bg-green-500 !text-white !min-w-[50%]"
+    >
+      {{ config.data?.confirmButtonText ?? "Confirmar" }}
+    </button>
+    @if (config.data?.showCancelButton ?? false) {
+    <button
+      mat-raised-button
+      (click)="cancel()"
+      class="!bg-red-500 !text-white !min-w-[50%]"
+    >
+      {{ config.data?.cancelButtonText ?? "Cancelar" }}
+    </button>
+    }
+  </div>
+</div>

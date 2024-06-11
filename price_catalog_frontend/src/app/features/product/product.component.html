@@ -1,24 +1,32 @@
-@if(isLoading) {
-<div class="w-full md:h-[538px] h-72 flex flex-col justify-center items-center">
-  <p class="text-center text-xl loading">Carregando informações</p>
-</div>
-} @else {
-<div class="grid w-full gap-4 justify-center my-4">
-  @for (product of products?.content; track $index) {
-  <app-product-card [product]="product" />
-  } @empty {
+<app-sidebar />
+<app-toolbar />
+<app-navbar />
+<main>
+  @if(isLoading) {
   <div
     class="w-full md:h-[538px] h-72 flex flex-col justify-center items-center"
   >
-    <p class="text-center text-xl">Nenhum produto encontrado</p>
+    <p class="text-center text-xl loading">Carregando informações</p>
   </div>
+  } @else {
+  <div class="grid w-full gap-4 justify-center my-4">
+    @for (product of products?.content; track $index) {
+    <app-product-card [product]="product" />
+    } @empty {
+    <div
+      class="w-full md:h-[538px] h-72 flex flex-col justify-center items-center"
+    >
+      <p class="text-center text-xl">Nenhum produto encontrado</p>
+    </div>
+    }
+  </div>
+  <p-paginator
+    (onPageChange)="onPageChange($event)"
+    [first]="first"
+    [rows]="pageSize"
+    [totalRecords]="products?.totalElements"
+    [rowsPerPageOptions]="[10, 20, 30]"
+  />
   }
-</div>
-<p-paginator
-  (onPageChange)="onPageChange($event)"
-  [first]="first"
-  [rows]="pageSize"
-  [totalRecords]="products?.totalElements"
-  [rowsPerPageOptions]="[10, 20, 30]"
-/>
-}
+</main>
+<app-footer />
