@@ -4,14 +4,15 @@ import com.jpsouza.webcrawler.dtos.LoginFormDTO;
 import com.jpsouza.webcrawler.dtos.RegisterUserFormDTO;
 import com.jpsouza.webcrawler.models.Role;
 import com.jpsouza.webcrawler.models.User;
+import jakarta.ws.rs.NotFoundException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,13 +40,18 @@ public class AuthenticationService {
     }
 
     public User login(LoginFormDTO loginForm) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginForm.getEmail(),
-                        loginForm.getPassword()
-                )
-        );
-        return userService.findByEmail(loginForm.getEmail())
-                .orElseThrow();
+        Optional<User> user = Optional.empty();
+        if (Objects.nonNull(loginForm.getUsername()) && !loginForm.getUsername().isEmpty()) {
+            user = userService.findByUsername(loginForm.getUsername());
+        }
+        if (user.isEmpty() && Objects.nonNull(loginForm.getEmail()) && !loginForm.getEmail().isEmpty()) {
+            user = userService.findByEmail(loginForm.getEmail());
+        }
+        if (user.isEmpty()) {
+            throw new NotFoundException("Usuário não encontrado no sistema");
+        }
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginForm.getEmail(),
+                loginForm.getPassword()));
+        return user.get();
     }
 }

@@ -33,7 +33,7 @@ public class SignInController {
         userResponse.setToken(jwtToken);
         userResponse.setExpiresIn(LocalDateTime.now().plusSeconds(jwtService.getExpirationTime()));
         userResponse.setRoles(authenticatedUser.getRoles().stream().map((role) ->
-                new ResponseRoleDTO(role.getId(), role.getName())).collect(Collectors.toSet()));
+                new ResponseRoleDTO(role.getName())).collect(Collectors.toSet()));
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 }
