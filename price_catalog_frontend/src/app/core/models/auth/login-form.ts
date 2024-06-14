@@ -1,5 +1,5 @@
 export class LoginForm {
-  email?: string;
-  username?: string;
-  password?: string;
+  email: string | undefined | null;
+  username: string | undefined | null;
+  password: string | undefined | null;
 }

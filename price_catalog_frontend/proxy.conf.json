@@ -1,0 +1,14 @@
+{
+  "/api": {
+    "changeOrigin": true,
+    "headers": {
+      "Connection": "keep-alive"
+    },
+    "logLevel": "info",
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "secure": false,
+    "target": "https://super-feline-loyal.ngrok-free.app"
+  }
+}

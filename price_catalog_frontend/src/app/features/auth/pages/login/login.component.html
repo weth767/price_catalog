@@ -15,27 +15,38 @@
     >
       Conecte-se na sua conta
     </h1>
-    <form class="w-full flex flex-col gap-4">
+    <form class="w-full flex flex-col gap-4" [formGroup]="loginForm">
       <mat-form-field appearance="outline">
         <mat-label class="text-blue-gray-700">E-mail ou username</mat-label>
-        <input class="text-blue-gray-700" matInput />
-        <mat-error></mat-error>
+        <input
+          class="text-blue-gray-700"
+          matInput
+          formControlName="usernameEmail"
+          required="true"
+        />
+        @if(loginForm.get('usernameEmail')?.hasError('required')) {
+        <mat-error>Campo obrigatório</mat-error>
+        }
       </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label class="text-blue-gray-700">Senha</mat-label>
-        <input class="text-blue-gray-700" matInput />
-        <mat-error></mat-error>
-      </mat-form-field>
+      <app-password-field
+        class="w-full"
+        formControlName="password"
+        [required]="true"
+      />
       <div class="flex items-center justify-between">
         <div class="flex items-start">
-          <mat-checkbox class="text-blue-gray-700"
+          <mat-checkbox
+            class="text-blue-gray-700"
+            formControlName="rememberPassword"
             >Lembrar da senha</mat-checkbox
           >
         </div>
       </div>
       <button
+        [disabled]="loginForm.invalid && loginForm.dirty"
         type="submit"
-        class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+        [class]="loginForm.invalid ? disabledButtonClass : buttonClass"
+        (click)="login()"
       >
         Conectar
       </button>

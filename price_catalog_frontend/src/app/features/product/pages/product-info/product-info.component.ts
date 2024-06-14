@@ -8,7 +8,7 @@ import { ChartData } from '../../../../core/models/chart-data';
 import { ChartOptions } from '../../../../core/models/chart-options';
 import { Product } from '../../../../core/models/product';
 import { ProductPrice } from '../../../../core/models/product-price';
-import { ProductService } from '../../../../core/services/product.service';
+import { ProductService } from '../../../../core/services/product/product.service';
 import { DateUtil } from '../../../../shared/util/date-util';
 
 @Component({

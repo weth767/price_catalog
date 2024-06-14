@@ -70,7 +70,10 @@
               "buildTarget": "price_catalog_frontend:build:production"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "proxyConfig": "proxy.config.json"
+          }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",

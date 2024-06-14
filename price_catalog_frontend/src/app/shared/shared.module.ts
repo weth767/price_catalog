@@ -6,6 +6,7 @@ import { CustomDialogComponent } from './components/custom-dialog/custom-dialog.
 import { FooterComponent } from './components/footer/footer.component';
 import { NavitemComponent } from './components/navbar/components/navitem/navitem.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { PasswordFieldComponent } from './components/password-field/password-field.component';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SearchFieldComponent } from './components/toolbar/components/search-field/search-field.component';
@@ -21,6 +22,7 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
     SearchFieldComponent,
     ProductCardComponent,
     CustomDialogComponent,
+    PasswordFieldComponent,
   ],
   imports: [CommonModule, AngularMaterialModule, PrimeNgModule],
   exports: [
@@ -29,6 +31,7 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
     SidebarComponent,
     NavbarComponent,
     ProductCardComponent,
+    PasswordFieldComponent,
   ],
 })
 export class SharedModule {}
