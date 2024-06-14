@@ -2,6 +2,7 @@ package com.jpsouza.webcrawler.controllers;
 
 import com.jpsouza.webcrawler.dtos.UserDTO;
 import com.jpsouza.webcrawler.models.User;
+import com.jpsouza.webcrawler.security.SecurityProvider;
 import com.jpsouza.webcrawler.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final SecurityProvider provider;
 
     @GetMapping("/by-email/{email}")
     public ResponseEntity<User> findByemail(@PathVariable String email) {
@@ -31,6 +33,6 @@ public class UserController {
 
     @GetMapping("/authenticated")
     public ResponseEntity<UserDTO> findAuthenticatedUser() {
-        return new ResponseEntity<>(userService.findAuthenticatedUser(), HttpStatus.OK);
+        return new ResponseEntity<>(provider.findAuthenticatedUser(), HttpStatus.OK);
     }
 }

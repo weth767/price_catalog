@@ -8,5 +8,5 @@ import lombok.Data;
 public class UserResponseDTO {
     private String token;
     private LocalDateTime expiresIn;
-    private Set<ResponseRoleDTO> roles;
+    private UserDTO user;
 }
