@@ -1,6 +1,5 @@
 package com.jpsouza.webcrawler.controllers;
 
-import com.jpsouza.webcrawler.dtos.UserDTO;
 import com.jpsouza.webcrawler.models.User;
 import com.jpsouza.webcrawler.security.SecurityProvider;
 import com.jpsouza.webcrawler.services.UserService;
@@ -29,10 +28,5 @@ public class UserController {
     @GetMapping("/by-username/{username}")
     public ResponseEntity<User> findByUsername(@PathVariable String username) {
         return new ResponseEntity<>(userService.findByUsername(username).orElse(null), HttpStatus.OK);
-    }
-
-    @GetMapping("/authenticated")
-    public ResponseEntity<UserDTO> findAuthenticatedUser() {
-        return new ResponseEntity<>(provider.findAuthenticatedUser(), HttpStatus.OK);
     }
 }
