@@ -34,7 +34,7 @@ public class User implements UserDetails, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false, unique = true)
-    private long id;
+    private Long id;
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "username", nullable = false, unique = true)

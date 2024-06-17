@@ -50,7 +50,7 @@ public class AuthenticationService {
         if (user.isEmpty()) {
             throw new NotFoundException("Usuário não encontrado no sistema");
         }
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginForm.getEmail(),
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.get().getEmail(),
                 loginForm.getPassword()));
         return user.get();
     }
