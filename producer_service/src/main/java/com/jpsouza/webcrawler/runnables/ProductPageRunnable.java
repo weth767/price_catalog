@@ -1,5 +1,6 @@
 package com.jpsouza.webcrawler.runnables;
 
+import com.jpsouza.webcrawler.repositories.LinkRepository;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +26,12 @@ import com.jpsouza.webcrawler.kafka.KafkaProducer;
 public class ProductPageRunnable implements Runnable {
     private final String url;
     private final KafkaProducer kafkaProducer;
+    private final LinkRepository linkRepository;
 
-    public ProductPageRunnable(String url, KafkaProducer kafkaProducer) {
+    public ProductPageRunnable(String url, KafkaProducer kafkaProducer, LinkRepository linkRepository) {
         this.url = url;
         this.kafkaProducer = kafkaProducer;
+        this.linkRepository = linkRepository;
     }
 
     private ProductDTO getDataFromSchema(Element element) {
@@ -164,6 +167,7 @@ public class ProductPageRunnable implements Runnable {
             Document document = Jsoup.parse(driver.getPageSource());
             ProductDTO productDTO = getData(document);
             if (Objects.nonNull(productDTO)) {
+                linkRepository.updateProductLink(url);
                 String json = new Gson().toJson(productDTO);
                 kafkaProducer.sendMessage(json);
                 driver.quit();
@@ -174,6 +178,7 @@ public class ProductPageRunnable implements Runnable {
             document = Jsoup.parse(driver.getPageSource());
             productDTO = getData(document);
             if (Objects.nonNull(productDTO)) {
+                linkRepository.updateProductLink(url);
                 String json = new Gson().toJson(productDTO);
                 kafkaProducer.sendMessage(json);
             }

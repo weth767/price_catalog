@@ -38,8 +38,8 @@ public class SecurityConfiguration {
                 .cors()
                 .and()
                 .csrf()
-                .disable().
-                authorizeRequests()
+                .disable()
+                .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
@@ -53,6 +53,8 @@ public class SecurityConfiguration {
     CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration().applyPermitDefaultValues();
+        config.addAllowedMethod(HttpMethod.POST);
+        config.addAllowedMethod(HttpMethod.GET);
         config.addAllowedMethod(HttpMethod.PUT);
         config.addAllowedMethod(HttpMethod.DELETE);
         config.addAllowedMethod(HttpMethod.PATCH);

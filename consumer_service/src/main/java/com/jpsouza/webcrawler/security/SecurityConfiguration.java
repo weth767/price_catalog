@@ -19,10 +19,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
-    @Qualifier("authenticationProvider")
     private final AuthenticationProvider authenticationProvider;
-    @Qualifier("jwtAuthenticationFilter")
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
@@ -40,8 +39,8 @@ public class SecurityConfiguration {
                 .cors()
                 .and()
                 .csrf()
-                .disable().
-                authorizeRequests()
+                .disable()
+                .authorizeRequests()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
@@ -55,6 +54,8 @@ public class SecurityConfiguration {
     CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration().applyPermitDefaultValues();
+        config.addAllowedMethod(HttpMethod.POST);
+        config.addAllowedMethod(HttpMethod.GET);
         config.addAllowedMethod(HttpMethod.PUT);
         config.addAllowedMethod(HttpMethod.DELETE);
         config.addAllowedMethod(HttpMethod.PATCH);

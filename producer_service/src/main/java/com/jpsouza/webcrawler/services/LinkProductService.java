@@ -1,5 +1,6 @@
 package com.jpsouza.webcrawler.services;
 
+import com.jpsouza.webcrawler.repositories.LinkRepository;
 import org.springframework.stereotype.Service;
 
 import com.jpsouza.webcrawler.kafka.KafkaProducer;
@@ -11,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LinkProductService {
     private final KafkaProducer kafkaProducer;
-    private Thread thread;
+    private final LinkRepository linkRepository;
 
     /**
      * Método que vai verificar quando é uma página de produto e filtrar as
@@ -19,7 +20,7 @@ public class LinkProductService {
      * nova tabela
      */
     public void verifyProductPageConditions(String url) {
-        thread = new Thread(new ProductPageRunnable(url, kafkaProducer));
+        Thread thread = new Thread(new ProductPageRunnable(url, kafkaProducer, linkRepository));
         thread.start();
     }
 }
