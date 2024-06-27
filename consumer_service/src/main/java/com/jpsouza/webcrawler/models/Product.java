@@ -3,10 +3,13 @@ package com.jpsouza.webcrawler.models;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -21,7 +24,10 @@ import lombok.ToString;
 @ToString
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_sequence_generator")
+    @SequenceGenerator(name = "product_sequence_generator", sequenceName = "product_sequence", allocationSize = 1)
     private Long id;
+    private Long code;
     private String name;
     private String description;
     @Column(name = "image_url")

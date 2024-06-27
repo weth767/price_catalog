@@ -1,5 +1,6 @@
 package com.jpsouza.webcrawler.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
@@ -21,8 +22,11 @@ public class Link {
     public Long id;
     public String url;
     public boolean verified;
+    @Column(name = "is_product_url", columnDefinition = "default false")
+    public boolean isProductUrl;
     @ManyToOne
     @JoinColumn(name = "domain_id", nullable = false)
+    @JsonManagedReference
     public Domain domain;
     @Column(name = "verified_in")
     public LocalDateTime verifiedIn;

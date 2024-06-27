@@ -1,5 +1,12 @@
 <div class="flex flex-col w-full gap-2">
   <h2 class="mb-0 px-8 !mt-4">Produtos recém adicionados</h2>
+  @if (!products?.content?.length) {
+  <div
+    class="w-full md:h-[338px] h-72 flex flex-col justify-center items-center"
+  >
+    <p class="text-center text-xl">Nenhum produto encontrado</p>
+  </div>
+  } @else {
   <p-carousel
     [value]="products?.content ?? []"
     [numVisible]="8"
@@ -38,4 +45,5 @@
       Ver todos os produtos
     </a>
   </div>
+  }
 </div>

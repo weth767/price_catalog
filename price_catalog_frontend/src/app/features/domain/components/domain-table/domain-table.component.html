@@ -1,0 +1,39 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+    <thead class="text-xs text-blue-gray-700 uppercase bg-gray-50">
+      <tr>
+        @for (column of columns; track $index) {
+        <th scope="col" class="px-6 py-3">
+          {{ column }}
+        </th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for(domain of domains?.content; track $index) {
+      <tr>
+        <th
+          scope="row"
+          class="px-6 py-4 font-medium text-blue-gray-900 whitespace-nowrap"
+        >
+          {{ domain.name }}
+        </th>
+        <td class="px-6 py-4">{{ domain.url }}</td>
+        <td class="px-6 py-4">
+          {{ domain.verified ? "Verificado" : "Não verificado" }}
+        </td>
+        <td class="px-6 py-4">
+          {{ domain.verifiedIn | date : "dd/MM/yyyy" }}
+        </td>
+        <td class="px-6 py-4">
+          <a
+            [href]="'/links?dominio=' + domain.name"
+            class="font-medium text-blue-600 no-underline"
+            >Visualizar links</a
+          >
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

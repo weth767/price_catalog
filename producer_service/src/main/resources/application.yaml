@@ -36,16 +36,15 @@ spring:
     topics:
       products: 6bb2322a221e8674e135be0a38698e94839900197a60e442b4a1e63e3256c40e
       links: 953859498b12b7926ee33080400ca65b0dc17de0c3e24828a13e6e4f06704bbf
-
 eureka:
   client:
     service-url:
       default-zone: http://localhost:8761/eureka/
     register-with-eureka: true
     fetch-registry: true
-
-
 feign:
+  hystrix:
+    enabled: true
   httpclient:
     disableSslValidation: true
   client:
@@ -64,3 +63,5 @@ logging:
     root: INFO
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG
+    org.apache.kafka: DEBUG
+    org.springframework.kafka: DEBUG

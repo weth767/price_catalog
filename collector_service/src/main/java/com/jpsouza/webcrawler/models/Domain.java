@@ -1,5 +1,6 @@
 package com.jpsouza.webcrawler.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
@@ -26,6 +27,7 @@ public class Domain {
     public boolean verified;
     @ToString.Exclude
     @OneToMany(mappedBy = "domain", cascade = CascadeType.ALL)
+    @JsonBackReference
     public Set<Link> links = new HashSet<>();
     @Column(name = "verified_in")
     public LocalDateTime verifiedIn;

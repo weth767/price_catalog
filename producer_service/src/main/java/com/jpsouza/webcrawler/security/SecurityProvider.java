@@ -1,6 +1,7 @@
 package com.jpsouza.webcrawler.security;
 
 import com.jpsouza.webcrawler.feign.UserFeignClient;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,12 +13,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityProvider {
     private final UserFeignClient userFeignClient;
-
-    public SecurityProvider(UserFeignClient userFeignClient) {
-        this.userFeignClient = userFeignClient;
-    }
 
     @Bean
     UserDetailsService userDetailsService() {

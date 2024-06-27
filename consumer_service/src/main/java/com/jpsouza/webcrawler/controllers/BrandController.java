@@ -1,6 +1,5 @@
 package com.jpsouza.webcrawler.controllers;
 
-import com.jpsouza.webcrawler.dtos.ResponseBrandDTO;
 import com.jpsouza.webcrawler.projections.BrandCountProjection;
 import com.jpsouza.webcrawler.services.BrandService;
 import lombok.RequiredArgsConstructor;

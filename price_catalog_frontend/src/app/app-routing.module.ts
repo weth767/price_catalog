@@ -27,6 +27,18 @@ const routes: Routes = [
       import('./features/auth/auth.module').then((m) => m.AuthModule),
   },
   {
+    path: 'dominios',
+    loadChildren: () =>
+      import('./features/domain/domain.module').then((m) => m.DomainModule),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'links',
+    loadChildren: () =>
+      import('./features/link/link.module').then((m) => m.LinkModule),
+    canActivate: [authGuard],
+  },
+  {
     path: '**',
     redirectTo: '',
   },

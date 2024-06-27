@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class FeignClientBrand {
-    private int id;
-    private int code;
+    private Integer id;
+    private Integer code;
     private String description;
 }

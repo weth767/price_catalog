@@ -1,5 +1,6 @@
 package com.jpsouza.webcrawler.models;
 
+import jakarta.persistence.SequenceGenerator;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -26,7 +27,8 @@ import lombok.ToString;
 @ToString
 public class ProductPrice {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_price_sequence_generator")
+    @SequenceGenerator(name = "product_price_sequence_generator", sequenceName = "product_price_sequence", allocationSize = 1)
     private Long id;
     private String url;
     @Column(name = "image_url")

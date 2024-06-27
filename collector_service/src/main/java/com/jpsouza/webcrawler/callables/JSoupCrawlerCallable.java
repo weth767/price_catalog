@@ -12,7 +12,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-import com.jpsouza.webcrawler.kafka.KafkaProducer;
+import com.jpsouza.webcrawler.kafka.    KafkaProducer;
 import com.jpsouza.webcrawler.services.LinkService;
 import com.jpsouza.webcrawler.utils.UrlUtils;
 
@@ -87,9 +87,13 @@ public class JSoupCrawlerCallable implements Callable<Set<String>> {
             // validar melhor como ser feito
             // Elements links = document.select("a[href~=^.*" + filteredText + ".*]");
             Elements links = document.select("a[href~=^" + filteredText + ".*]");
+            Elements internalLinks = document.select("a[href~=^/.*]");
             Set<String> newLinks = links.stream().map((elementLink) -> elementLink.attr("href"))
                     .filter(UrlUtils::isUrlValid)
                     .collect(Collectors.toSet());
+            newLinks.addAll(internalLinks.stream().map((elementLink) -> filteredText + elementLink.attr("href"))
+                    .filter(UrlUtils::isUrlValid)
+                    .collect(Collectors.toSet()));
             driver.quit();
             kafkaProducer.sendMessage(url);
             return newLinks;

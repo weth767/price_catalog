@@ -1,6 +1,7 @@
 package com.jpsouza.webcrawler.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,9 +19,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
+    @Qualifier("authenticationProvider")
     private final AuthenticationProvider authenticationProvider;
+    @Qualifier("jwtAuthenticationFilter")
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 

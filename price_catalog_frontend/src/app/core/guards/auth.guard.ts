@@ -16,6 +16,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     authentication &&
     new Date(authentication.expiresIn).getTime() < Date.now()
   ) {
+    console.log('authorized');
     return true;
   }
   const credentials = LocalStorage.getItem(

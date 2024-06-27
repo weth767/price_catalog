@@ -1,5 +1,12 @@
 <div class="flex flex-col w-full gap-2">
   <h2 class="mb-0 px-8 !mt-4">Top marcas</h2>
+  @if(!brands?.content?.length) {
+  <div
+    class="w-full md:h-[338px] h-72 flex flex-col justify-center items-center"
+  >
+    <p class="text-center text-xl">Nenhuma marca encontrada</p>
+  </div>
+  } @else {
   <p-carousel
     [value]="brands?.content ?? []"
     [numVisible]="8"
@@ -34,4 +41,5 @@
       Ver todas as marcas
     </span>
   </div>
+  }
 </div>

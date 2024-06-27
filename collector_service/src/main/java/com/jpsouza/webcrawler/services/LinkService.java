@@ -1,12 +1,19 @@
 package com.jpsouza.webcrawler.services;
 
+import com.jpsouza.webcrawler.dtos.DomainFilterDTO;
+import com.jpsouza.webcrawler.dtos.LinkDTO;
+import com.jpsouza.webcrawler.dtos.LinkFilterDTO;
+import com.jpsouza.webcrawler.mappers.LinkMapper;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.jpsouza.webcrawler.models.Domain;
@@ -19,6 +26,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LinkService {
     private final LinkRepository linkRepository;
+    private final LinkMapper linkMapper;
+
+    public Page<LinkDTO> findAllPageable(LinkFilterDTO linkFilter, Pageable pageable) {
+        if (Objects.nonNull(linkFilter.getDomain())) {
+            return linkRepository.findByDomain_NameLikeIgnoreCase(linkFilter.getDomain(), pageable).map(linkMapper::toDTO);
+        }
+        return linkRepository.findAll(pageable).map(linkMapper::toDTO);
+    }
 
     public boolean existsByUrlAndVerifiedTrue(String url) {
         return linkRepository.existsByUrlAndVerifiedTrue(url);

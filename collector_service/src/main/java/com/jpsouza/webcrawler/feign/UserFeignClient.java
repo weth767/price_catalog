@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient(value = "user", url = "${feign.user.url}")
 public interface UserFeignClient {
     @RequestMapping(method = RequestMethod.GET, value = "/by-email/{email}")
-    Optional<UserFeignDTO> findByEmail(@PathVariable String email);
+    Optional<UserFeignDTO> findByEmail(@PathVariable(value = "email") String email);
 
     @RequestMapping(method = RequestMethod.GET, value = "/by-username/{username}")
-    Optional<UserFeignDTO> findByUsername(@PathVariable String username);
+    Optional<UserFeignDTO> findByUsername(@PathVariable(value = "username") String username);
 }

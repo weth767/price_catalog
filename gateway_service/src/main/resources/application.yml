@@ -13,7 +13,7 @@ spring:
             uri: http://localhost:8761/eureka/
       routes:
         - id: producer-service
-          uri: lb://producer-service
+          uri: http://localhost:8082 #lb://producer-service
           predicates:
             - Path=/producer/**
           filters:
@@ -25,7 +25,7 @@ spring:
               allowedHeaders: '*'
               maxAge: 30
         - id: collector-service
-          uri: lb://collector-service
+          uri: http://localhost:8081 #lb://collector-service
           predicates:
             - Path=/collector/**
           filters:
@@ -37,7 +37,7 @@ spring:
               allowedHeaders: '*'
               maxAge: 30
         - id: consumer-service
-          uri: lb://consumer-service
+          uri: http://localhost:8083 #lb://consumer-service
           predicates:
             - Path=/consumer/**
           filters:
@@ -49,7 +49,7 @@ spring:
               allowedHeaders: '*'
               maxAge: 30
         - id: classifier-service
-          uri: lb://classifier-service
+          uri: http://localhost:8084 #lb://classifier-service
           predicates:
             - Path=/classifier/**
           filters:
@@ -61,7 +61,7 @@ spring:
               allowedHeaders: '*'
               maxAge: 30
         - id: user-service
-          uri: lb://user-service
+          uri: http://localhost:8085 #lb://user-service
           predicates:
             - Path=/user/**
           filters:

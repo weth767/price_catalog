@@ -1,0 +1,27 @@
+<app-sidebar />
+<app-toolbar />
+<app-navbar />
+<main>
+  <p-breadcrumb [model]="breadcrumbItems" [home]="home" />
+  @if(isLoading) {
+  <div
+    class="w-full md:h-[500px] h-72 flex flex-col justify-center items-center"
+  >
+    <p class="text-center text-xl loading">Carregando informações</p>
+  </div>
+  } @else {
+  <div class="min-h-[calc(500px-56px)]">
+    <app-link-table [links]="links" />
+  </div>
+  <div class="h-14 w-full">
+    <p-paginator
+      (onPageChange)="onPageChange($event)"
+      [first]="first"
+      [rows]="pageSize"
+      [totalRecords]="links?.totalElements"
+      [rowsPerPageOptions]="[30, 50, 70]"
+    />
+  </div>
+  }
+</main>
+<app-footer />

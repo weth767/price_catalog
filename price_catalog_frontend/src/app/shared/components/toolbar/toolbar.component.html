@@ -13,7 +13,10 @@
     </div>
     <app-search-field class="md:w-2/5 w-full" />
   </div>
-  <div class="flex flex-col md:justify-center items-center gap-1">
+  <div
+    class="flex flex-col md:justify-center items-center gap-1 cursor-pointer"
+    [matMenuTriggerFor]="menu"
+  >
     <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full">
       <svg
         class="absolute w-12 h-12 text-gray-400 -left-1"
@@ -30,4 +33,7 @@
     </div>
     <span class="text-white text-sm">{{ user?.name ?? "Usuário" }}</span>
   </div>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="logout()">Deslogar</button>
+  </mat-menu>
 </header>

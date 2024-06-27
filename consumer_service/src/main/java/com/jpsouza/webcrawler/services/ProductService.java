@@ -1,6 +1,7 @@
 package com.jpsouza.webcrawler.services;
 
 import com.jpsouza.webcrawler.models.Brand;
+import com.jpsouza.webcrawler.models.FeignClientBrand;
 import com.jpsouza.webcrawler.repositories.BrandRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -37,15 +38,15 @@ public class ProductService {
     @Autowired
     private final ProductFeignClient productFeignClient;
 
-    public Product getProduct(ProductDTO product) {
+    public void getProduct(ProductDTO product) {
         FeignClientProduct feignClientProduct = classifierFeignClient.startAnalysis(product);
         if (Objects.isNull(feignClientProduct)) {
             feignClientProduct = productFeignClient.createInexistentProduct(product);
         }
-        return saveProduct(feignClientProduct, product);
+        saveProduct(feignClientProduct, product);
     }
 
-    private Product saveProduct(FeignClientProduct feignClientProduct, ProductDTO product) {
+    private void saveProduct(FeignClientProduct feignClientProduct, ProductDTO product) {
         // verificar se o produto já existe na base de dados de, se existir, só atualiza
         // os preços
         Long id = Long.parseLong(Integer.toString(feignClientProduct.getCode()));
@@ -63,20 +64,35 @@ public class ProductService {
             productPrice.setProduct(newProduct);
             productPrices.add(productPrice);
             newProduct.setProductPrices(productPrices);
-            return productRepository.saveAndFlush(newProduct);
+            productRepository.saveAndFlush(newProduct);
+            return;
         }
 
         Product newProduct = new Product();
-        newProduct.setId(Long.parseLong(Integer.toString(feignClientProduct.getCode())));
+        Long lastCode = productRepository.getLastCode() + 1;
         newProduct.setName(product.getName());
         newProduct.setDescription(product.getDescription());
         newProduct.setImageUrl(feignClientProduct.getImageUrl());
         productPrice.setProduct(newProduct);
         newProduct.setProductPrices(new ArrayList<>(List.of(productPrice)));
         newProduct.setStatus(true);
+        newProduct.setCode(lastCode);
         //ver algo para resolver a questão de quando não existe a marca, porque tem a questão do code
-        newProduct.setBrand(brandRepository.findById((long) feignClientProduct.getBrand().getCode()).orElse(brandRepository.save(new Brand(null, product.getBrand(), brandRepository.getLastCode()))));
-        return productRepository.saveAndFlush(newProduct);
+        Brand brand = generateBrand(feignClientProduct.getBrand());
+        newProduct.setBrand(brand);
+        productRepository.saveAndFlush(newProduct);
+    }
+
+    private Brand generateBrand(FeignClientBrand feignClientBrand) {
+        Optional<Brand> optionalBrand = brandRepository.findById(Long.parseLong(feignClientBrand.getCode().toString()));
+        if (optionalBrand.isPresent()) {
+            return optionalBrand.get();
+        }
+        Brand brand = new Brand();
+        Long lastCode = brandRepository.getLastCode() + 1;
+        brand.setCode(lastCode);
+        brand.setDescription(feignClientBrand.getDescription());
+        return brandRepository.save(brand);
     }
 
     public Page<ResponseProductDTO> getProductsPaged(Pageable pageable) {

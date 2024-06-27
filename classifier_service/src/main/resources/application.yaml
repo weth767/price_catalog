@@ -20,6 +20,8 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
 feign:
+  hystrix:
+    enabled: true
   httpclient:
     disableSslValidation: true
   client:
