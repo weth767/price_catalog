@@ -1,12 +1,13 @@
 package com.jpsouza.webcrawler.runnables;
 
-import com.jpsouza.webcrawler.repositories.LinkRepository;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,17 +17,21 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.jpsouza.webcrawler.builders.SchemaNextProductDtoBuilder;
 import com.jpsouza.webcrawler.builders.SchemaProductDtoBuilder;
 import com.jpsouza.webcrawler.builders.TagProductDtoBuilder;
 import com.jpsouza.webcrawler.dtos.ProductDTO;
 import com.jpsouza.webcrawler.enums.TagDomain;
 import com.jpsouza.webcrawler.kafka.KafkaProducer;
+import com.jpsouza.webcrawler.repositories.LinkRepository;
 
 public class ProductPageRunnable implements Runnable {
     private final String url;
     private final KafkaProducer kafkaProducer;
     private final LinkRepository linkRepository;
+
+    private static final Logger LOGGER = LogManager.getLogger(ProductPageRunnable.class);
 
     public ProductPageRunnable(String url, KafkaProducer kafkaProducer, LinkRepository linkRepository) {
         this.url = url;
@@ -34,74 +39,85 @@ public class ProductPageRunnable implements Runnable {
         this.linkRepository = linkRepository;
     }
 
-    private ProductDTO getDataFromSchema(Element element) {
+    private ProductDTO getDataFromSchema(Element element) throws IOException {
         // Removidas as ocorrencias da seguinte sequencia \\", que atrapalhava na
         // conversão do json
-        String json = element.html().replaceAll("\\\\\\\\\"", "");
-        Map<?, ?> schema = new GsonBuilder().setLenient().setPrettyPrinting().disableHtmlEscaping().create()
-                .fromJson(json, Map.class);
-        // verifica se o schema é dividido em vários JSONs
-        if (schema.containsKey("@graph")) {
-            List<?> graph = (List<?>) schema.get("@graph");
-            Optional<?> optional = graph.stream()
-                    .filter((subschema) -> subschema instanceof Map<?, ?>
-                            && ((Map<?, ?>) subschema).containsKey("@type")
-                            && ((Map<?, ?>) subschema).get("@type").toString().equalsIgnoreCase("product"))
-                    .findFirst();
-            return optional.map(optionalSchema -> new SchemaProductDtoBuilder((Map<?, ?>) optionalSchema, url)
-                    .name()
-                    .imageUrl()
-                    .description()
-                    .brand()
-                    .category()
-                    .offersAssociatedData()
-                    .build()).orElse(null);
+        try {
+            String json = element.html().replaceAll("\\\\\\\\\"", "");
+            Map<?, ?> schema = new GsonBuilder().setLenient().setPrettyPrinting().disableHtmlEscaping().create()
+                    .fromJson(json, Map.class);
+            // verifica se o schema é dividido em vários JSONs
+            if (schema.containsKey("@graph")) {
+                List<?> graph = (List<?>) schema.get("@graph");
+                Optional<?> optional = graph.stream()
+                        .filter((subschema) -> subschema instanceof Map<?, ?>
+                                && ((Map<?, ?>) subschema).containsKey("@type")
+                                && ((Map<?, ?>) subschema).get("@type").toString().equalsIgnoreCase("product"))
+                        .findFirst();
+                return optional.map(optionalSchema -> new SchemaProductDtoBuilder((Map<?, ?>) optionalSchema, url)
+                        .name()
+                        .imageUrl()
+                        .description()
+                        .brand()
+                        .category()
+                        .offersAssociatedData()
+                        .build()).orElse(null);
+            }
+            if (schema.containsKey("@type") && schema.get("@type").toString().equalsIgnoreCase("product")) {
+                return new SchemaProductDtoBuilder(schema, url)
+                        .name()
+                        .imageUrl()
+                        .description()
+                        .brand()
+                        .category()
+                        .offersAssociatedData()
+                        .build();
+            }
+            return null;
+        } catch (JsonSyntaxException e) {
+            LOGGER.error(e);
+            throw new IOException("Erro ao converter JSON", e);
         }
-        if (schema.containsKey("@type") && schema.get("@type").toString().equalsIgnoreCase("product")) {
-            return new SchemaProductDtoBuilder(schema, url)
-                    .name()
-                    .imageUrl()
-                    .description()
-                    .brand()
-                    .category()
-                    .offersAssociatedData()
-                    .build();
-        }
-        return null;
     }
 
-    private ProductDTO getDataFromSchemaNext(Element element) {
+    private ProductDTO getDataFromSchemaNext(Element element) throws IOException {
         String json = element.html().replaceAll("\\\\\\\\\"", "");
-        Map<?, ?> schema = new GsonBuilder().setLenient().setPrettyPrinting().disableHtmlEscaping().create()
-                .fromJson(json, Map.class);
-        if (!schema.containsKey("props")) {
-            return null;
+        try {
+            Map<?, ?> schema = new GsonBuilder().setLenient().setPrettyPrinting().disableHtmlEscaping().create()
+                    .fromJson(json, Map.class);
+            if (!schema.containsKey("props")) {
+                return null;
+            }
+            Map<?, ?> props = (Map<?, ?>) schema.get("props");
+            if (!props.containsKey("initialState")) {
+                return null;
+            }
+            Map<?, ?> initialState = (Map<?, ?>) props.get("initialState");
+            if (!initialState.containsKey("Product") || !initialState.containsKey("ProductPrice")) {
+                return null;
+            }
+            Map<?, ?> product = (Map<?, ?>) initialState.get("Product");
+            Map<?, ?> productPrice = (Map<?, ?>) initialState.get("ProductPrice");
+            if (!product.containsKey("product")) {
+                return null;
+            }
+            SchemaNextProductDtoBuilder builder = new SchemaNextProductDtoBuilder(product, productPrice, url);
+            return builder
+                    .imageUrl()
+                    .name()
+                    .description()
+                    .brand()
+                    .category()
+                    .price()
+                    .availability()
+                    .condition()
+                    .currency()
+                    .build();
+        } catch (JsonSyntaxException e) {
+            LOGGER.error(e);
+            throw new IOException("Erro ao converter JSON", e);
         }
-        Map<?, ?> props = (Map<?, ?>) schema.get("props");
-        if (!props.containsKey("initialState")) {
-            return null;
-        }
-        Map<?, ?> initialState = (Map<?, ?>) props.get("initialState");
-        if (!initialState.containsKey("Product") || !initialState.containsKey("ProductPrice")) {
-            return null;
-        }
-        Map<?, ?> product = (Map<?, ?>) initialState.get("Product");
-        Map<?, ?> productPrice = (Map<?, ?>) initialState.get("ProductPrice");
-        if (!product.containsKey("product")) {
-            return null;
-        }
-        SchemaNextProductDtoBuilder builder = new SchemaNextProductDtoBuilder(product, productPrice, url);
-        return builder
-                .imageUrl()
-                .name()
-                .description()
-                .brand()
-                .category()
-                .price()
-                .availability()
-                .condition()
-                .currency()
-                .build();
+
     }
 
     private ProductDTO getData(Document document) throws IOException {

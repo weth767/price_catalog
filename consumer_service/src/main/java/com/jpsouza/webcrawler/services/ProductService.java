@@ -1,8 +1,5 @@
 package com.jpsouza.webcrawler.services;
 
-import com.jpsouza.webcrawler.models.Brand;
-import com.jpsouza.webcrawler.models.FeignClientBrand;
-import com.jpsouza.webcrawler.repositories.BrandRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,15 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jpsouza.webcrawler.dtos.ProductDTO;
 import com.jpsouza.webcrawler.dtos.ResponseProductDTO;
 import com.jpsouza.webcrawler.feign.ClassifierFeignClient;
 import com.jpsouza.webcrawler.feign.ProductFeignClient;
 import com.jpsouza.webcrawler.mappers.ResponseProductMapper;
+import com.jpsouza.webcrawler.models.Brand;
+import com.jpsouza.webcrawler.models.FeignClientBrand;
 import com.jpsouza.webcrawler.models.FeignClientProduct;
 import com.jpsouza.webcrawler.models.Product;
 import com.jpsouza.webcrawler.models.ProductPrice;
+import com.jpsouza.webcrawler.repositories.BrandRepository;
 import com.jpsouza.webcrawler.repositories.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,7 @@ public class ProductService {
     @Autowired
     private final ProductFeignClient productFeignClient;
 
+    @Transactional
     public void getProduct(ProductDTO product) {
         FeignClientProduct feignClientProduct = classifierFeignClient.startAnalysis(product);
         if (Objects.isNull(feignClientProduct)) {
@@ -77,7 +79,8 @@ public class ProductService {
         newProduct.setProductPrices(new ArrayList<>(List.of(productPrice)));
         newProduct.setStatus(true);
         newProduct.setCode(lastCode);
-        //ver algo para resolver a questão de quando não existe a marca, porque tem a questão do code
+        // ver algo para resolver a questão de quando não existe a marca, porque tem a
+        // questão do code
         Brand brand = generateBrand(feignClientProduct.getBrand());
         newProduct.setBrand(brand);
         productRepository.saveAndFlush(newProduct);

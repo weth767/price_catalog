@@ -1,9 +1,5 @@
 package com.jpsouza.webcrawler.services;
 
-import com.jpsouza.webcrawler.dtos.DomainFilterDTO;
-import com.jpsouza.webcrawler.dtos.LinkDTO;
-import com.jpsouza.webcrawler.dtos.LinkFilterDTO;
-import com.jpsouza.webcrawler.mappers.LinkMapper;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.jpsouza.webcrawler.dtos.LinkDTO;
+import com.jpsouza.webcrawler.dtos.LinkFilterDTO;
+import com.jpsouza.webcrawler.mappers.LinkMapper;
 import com.jpsouza.webcrawler.models.Domain;
 import com.jpsouza.webcrawler.models.Link;
 import com.jpsouza.webcrawler.repositories.LinkRepository;
@@ -30,7 +29,8 @@ public class LinkService {
 
     public Page<LinkDTO> findAllPageable(LinkFilterDTO linkFilter, Pageable pageable) {
         if (Objects.nonNull(linkFilter.getDomain())) {
-            return linkRepository.findByDomain_NameLikeIgnoreCase(linkFilter.getDomain(), pageable).map(linkMapper::toDTO);
+            return linkRepository.findByDomain_NameLikeIgnoreCase(linkFilter.getDomain(), pageable)
+                    .map(linkMapper::toDTO);
         }
         return linkRepository.findAll(pageable).map(linkMapper::toDTO);
     }
