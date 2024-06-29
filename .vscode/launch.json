@@ -1,48 +1,3 @@
-# Price Catalog Project
-
-## This is a final college project that search products prices and compare to last prices stored
-
-### Make sure you have Docker and Docker Compose installed on your system to run databases and Kafka containers
-
-### To run this project you can to use VSCode, using their launch configuration or using Make
-
-### To run all microservices will have a different command
-
-* Docker containers:
-`make docker-compose`
-* Eureka:
-`make run_eureka`
-* Gateway:
-`make run_gateway`
-* User serivce:
-`make run_user`
-* Collector:
-`make run_collector`
-* Producer:
-`make run_producer`
-* Classifier:
-`make run_classifier`
-* Consumer:
-`make run_consumer`
-
-### The order to run is
-
-```text
-1º - Docker containers
-2º - Eureka
-3º - Gateway
-4º - User service
-5º - Collector service
-6º - Producer service
-7ª - Classifier service
-8º - Consumer service
-```
-
-### In case if is necessary use VSCode launch, follow down files descriptions
-
-### [launch.json]
-
-```json
 {
   "configurations": [
     {
@@ -107,19 +62,11 @@
       "command": "cd docker && docker-compose up -d",
       "request": "launch"
     },
+    {
+      "type": "node-terminal",
+      "name": "Ngrok localhost",
+      "command": "ngrok http 8080 --domain=super-feline-loyal.ngrok-free.app --host-header='localhost:8080'",
+      "request": "launch"
+    }
   ]
 }
-```
-
-### [Optional] Some configurations(settings.json) to set in VSCode to run Java projects
-
-```json
-{
-  "java.compile.nullAnalysis.mode": "automatic",
-  "java.configuration.updateBuildConfiguration": "automatic",
-  "java.debug.settings.onBuildFailureProceed": true,
-  "java.debug.settings.showQualifiedNames": true
-}
-```
-
-### **Observation:** used Ngrok to tunnel gateway and simulates a real application, if you don't want to use, feel free to change variables in the frontend environment

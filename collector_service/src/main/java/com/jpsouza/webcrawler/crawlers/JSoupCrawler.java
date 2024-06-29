@@ -20,7 +20,7 @@ import com.jpsouza.webcrawler.models.Domain;
 import com.jpsouza.webcrawler.models.Link;
 import com.jpsouza.webcrawler.services.DomainService;
 import com.jpsouza.webcrawler.services.LinkService;
-import com.jpsouza.webcrawler.utils.UrlUtils;
+import com.jpsouza.webcrawler.services.QueueService;
 
 @Component
 public class JSoupCrawler {
@@ -43,30 +43,22 @@ public class JSoupCrawler {
             linkService.resetAllLinks();
         }
         List<Domain> domainList = domainService.findByUrlInOrderByIdAsc(urls);
-        for (Domain domain : domainList) {
-            // melhorar a logica das threds para permitir que vários dominios sejam
-            // analisados ao mesmo tempo
+        QueueService.getInstance().getQueue().addAll(domainList);
+        while (!QueueService.getInstance().getQueue().isEmpty()) {
+            Domain domain = QueueService.getInstance().getQueue().poll();
             explore(domain.url, domain, domain.url);
-            /*
-             * (new Thread() {
-             * public void run() {
-             * try {
-             * explore(domain.url, domain, domain.url);
-             * } catch (Exception e) {
-             * e.printStackTrace();
-             * }
-             * }
-             * }).run();
-             */
-
         }
     }
 
     public void startCompleteCrawling(int crawler) throws Exception {
-        List<Domain> domains = domainService.findAll();
-        linkService.resetAllLinks();
-        for (Domain domain : domains) {
-            explore(domain.url, domain, UrlUtils.getDomainName(domain.url));
+        if (QueueService.getInstance().getQueue().isEmpty()) {
+            List<Domain> domains = domainService.findAll();
+            linkService.resetAllLinks();
+            QueueService.getInstance().getQueue().addAll(domains);
+            while (!QueueService.getInstance().getQueue().isEmpty()) {
+                Domain domain = QueueService.getInstance().getQueue().poll();
+                explore(domain.url, domain, domain.url);
+            }
         }
     }
 
@@ -77,35 +69,18 @@ public class JSoupCrawler {
         Set<String> links = future.get();
         Optional<Link> linkOptional = linkService.findByUrl(url);
         if (linkOptional.isPresent()) {
-            // se o link já foi visto antes, agora que eu tenho todos os links dentro desse
-            // site, eu marco ele como verificado
             Link newLink = linkOptional.get();
             newLink.verified = true;
             newLink.verifiedIn = LocalDateTime.now();
             linkService.updateLink(newLink);
         } else {
-            // se ainda não foi visto, mas agora que eu tenho todos os link dentro dele, eu
-            // salvo ele como visto também
             linkService.upsertLink(url, domain, true, LocalDateTime.now());
         }
         if (links.isEmpty()) {
             return;
         }
-        // salva os links encontrados dentro da página da url testada
         linkService.upsertLinks(links, domain);
         for (String link : links) {
-            // melhorar a logica das
-            /*
-             * (new Thread() {
-             * public void run() {
-             * try {
-             * explore(link, domain, filteredText);
-             * } catch (Exception e) {
-             * e.printStackTrace();
-             * }
-             * }
-             * }).run();
-             */
             explore(link, domain, filteredText);
         }
     }
@@ -115,5 +90,6 @@ public class JSoupCrawler {
             executorService.shutdown();
             LOGGER.info("Serviço parado");
         }
+        QueueService.getInstance().getQueue().clear();
     }
 }
