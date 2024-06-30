@@ -2,11 +2,10 @@ package com.jpsouza.webcrawler.feign.dtos;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Data;
@@ -26,7 +25,7 @@ public class UserFeignDTO implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map((role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+        return List.of();
     }
 
     @Override

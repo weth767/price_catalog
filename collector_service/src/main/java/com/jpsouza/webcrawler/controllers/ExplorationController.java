@@ -1,7 +1,6 @@
 package com.jpsouza.webcrawler.controllers;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 public class ExplorationController {
     private final ExplorationService explorationService;
 
-    @Secured("ADMIN")
     @PostMapping(value = "/start")
     public ResponseEntity<String> startCrawler(@RequestBody ExplorationDataDTO explorationData) {
         try {
@@ -31,7 +29,6 @@ public class ExplorationController {
         }
     }
 
-    @Secured("ADMIN")
     @PutMapping(value = "/stop")
     public ResponseEntity<String> stopCrawler() {
         explorationService.stopExploration();

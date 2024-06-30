@@ -39,7 +39,7 @@ public class JSoupCrawler {
     public void startCrawler(int crawlers, Set<String> urls, boolean reset) throws Exception {
         domainService.upsertAll(urls);
         executorService = Executors.newFixedThreadPool(crawlers);
-        if (reset) {
+        if (reset && QueueService.getInstance().getQueue().isEmpty()) {
             linkService.resetAllLinks();
         }
         List<Domain> domainList = domainService.findByUrlInOrderByIdAsc(urls);
