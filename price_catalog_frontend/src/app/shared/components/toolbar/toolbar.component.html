@@ -3,9 +3,9 @@
 >
   <div class="flex md:flex-row flex-col md:!items-center gap-4 w-full">
     <div class="flex flex-row items-center">
-      <button mat-icon-button aria-label="Menu button to open side bar">
+      <!--  <button mat-icon-button aria-label="Menu button to open side bar">
         <mat-icon class="!text-white">menu</mat-icon>
-      </button>
+      </button> -->
       <div class="flex flex-row !items-center gap-1">
         <img src="/assets/logo.png" class="w-6 h-6" />
         <h1 class="!p-0 !m-0 !text-xl !mr-4 text-white">Price Catalog</h1>
@@ -14,7 +14,7 @@
     <app-search-field class="md:w-2/5 w-full" />
   </div>
   <div
-    class="flex flex-col md:justify-center items-center gap-1 cursor-pointer"
+    class="flex flex-col md:justify-center items-center gap-1 cursor-pointer md:p-0 p-4"
     [matMenuTriggerFor]="menu"
   >
     <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full">

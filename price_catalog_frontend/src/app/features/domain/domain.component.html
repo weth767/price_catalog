@@ -10,7 +10,53 @@
     <p class="text-center text-xl loading">Carregando informações</p>
   </div>
   } @else {
-  <div class="min-h-[calc(500px-56px)]">
+  <div class="min-h-[calc(482px-56px)]">
+    <div class="flex flex-row w-full p-4 gap-4">
+      <button
+        (click)="addNewDomainsToExplore()"
+        type="button"
+        class="text-white hover:bg-blue-700 bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 shadow-transparent shadow-sm"
+      >
+        <svg
+          class="w-6 h-6 text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 12h14m-7 7V5"
+          />
+        </svg>
+        Adicionar domínios a busca
+      </button>
+      <button
+        (click)="stopCrawler()"
+        type="button"
+        class="text-white hover:bg-blue-700 bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 shadow-transparent shadow-sm"
+      >
+        <svg
+          class="w-6 h-6 text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M7 5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H7Z"
+          />
+        </svg>
+        Parar explorador
+      </button>
+    </div>
     <app-domain-table [domains]="domains" />
   </div>
   <div class="h-14 w-full">

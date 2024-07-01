@@ -67,6 +67,12 @@
       "name": "Ngrok localhost",
       "command": "ngrok http 8080 --domain=super-feline-loyal.ngrok-free.app --host-header='localhost:8080'",
       "request": "launch"
+    },
+    {
+      "type": "node-terminal",
+      "name": "Frontend",
+      "command": "cd price_catalog_frontend && npm start",
+      "request": "launch"
     }
   ]
 }

@@ -53,4 +53,8 @@ export class CustomDialogService {
     }
     this.dialogRefs = {};
   }
+
+  public get refs(): Dictionary<DynamicDialogRef> {
+    return this.dialogRefs;
+  }
 }

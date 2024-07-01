@@ -1,0 +1,82 @@
+<h2 mat-dialog-title>Adicionar novos domínios para explorar</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="flex flex-col w-full">
+    <mat-form-field appearance="outline" class="mt-4">
+      <mat-label>Domínios</mat-label>
+      <textarea
+        formControlName="domains"
+        matInput
+        placeholder="Insira os domínios separados por vírgula"
+      ></textarea>
+    </mat-form-field>
+    <section class="flex content-center items-center h-14 gap-2 my-4">
+      <label class="">Redefinir buscas:</label>
+      <mat-radio-group formControlName="reset">
+        <mat-radio-button [value]="true" color="primary">Sim</mat-radio-button>
+        <mat-radio-button [value]="false" color="primary">Não</mat-radio-button>
+      </mat-radio-group>
+    </section>
+    <mat-form-field appearance="outline">
+      <mat-label>Número de investigadores</mat-label>
+      <input matInput type="number" formControlName="crawlers" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="flex flex-row items-center justify-center gap-2 p-4 w-full">
+    <button
+      [disabled]="loading"
+      (click)="addDomainsToExplore()"
+      type="button"
+      class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex justify-center items-center me-2 gap-1"
+    >
+      @if (loading) {
+      <img src="/assets/loading_white.svg" class="w-4 h-4" />
+      } @else {
+      <svg
+        class="w-4 h-4 text-white"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 12h14m-7 7V5"
+        />
+      </svg>
+      } Adicionar
+    </button>
+    <button
+      (click)="close()"
+      type="button"
+      class="text-blue-gray-900 w-full bg-gray-300 hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex justify-center items-center me-2 gap-1"
+    >
+      @if (loading) {<img src="/assets/loading_black.svg" class="w-4 h-4" /> }
+      @else {
+      <svg
+        class="w-4 h-4 text-gray-800"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18 17.94 6M18 18 6.06 6"
+        />
+      </svg>
+      } Cancelar
+    </button>
+  </div>
+</mat-dialog-actions>

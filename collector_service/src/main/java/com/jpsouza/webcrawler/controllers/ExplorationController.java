@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jpsouza.webcrawler.dtos.ExplorationDataDTO;
+import com.jpsouza.webcrawler.dtos.MessageResponseDTO;
 import com.jpsouza.webcrawler.services.ExplorationService;
 
 import lombok.RequiredArgsConstructor;
@@ -19,19 +20,20 @@ public class ExplorationController {
     private final ExplorationService explorationService;
 
     @PostMapping(value = "/start")
-    public ResponseEntity<String> startCrawler(@RequestBody ExplorationDataDTO explorationData) {
+    public ResponseEntity<MessageResponseDTO> startCrawler(@RequestBody ExplorationDataDTO explorationData) {
         try {
             explorationService.startExploration(explorationData);
-            return ResponseEntity.ok("Crawler iniciado com sucesso!");
+            return ResponseEntity.ok(new MessageResponseDTO("Crawler iniciado com sucesso!"));
         } catch (Exception exception) {
             return ResponseEntity.internalServerError()
-                    .body("Crawler não foi iniciado com sucesso! Confira o log: " + exception.getMessage());
+                    .body(new MessageResponseDTO(
+                            "Crawler não foi iniciado com sucesso! Confira o log: " + exception.getMessage()));
         }
     }
 
     @PutMapping(value = "/stop")
-    public ResponseEntity<String> stopCrawler() {
+    public ResponseEntity<MessageResponseDTO> stopCrawler() {
         explorationService.stopExploration();
-        return ResponseEntity.ok("Crawler foi finalizado com sucesso!");
+        return ResponseEntity.ok(new MessageResponseDTO("Crawler foi finalizado com sucesso!"));
     }
 }
