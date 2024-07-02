@@ -4,6 +4,8 @@
 
 ### Make sure you have Docker and Docker Compose installed on your system to run databases and Kafka containers
 
+### Its necessary, install too, Angular 17 and Java 17 to run Frontend and Backend Microservices
+
 ### To run this project you can to use VSCode, using their launch configuration or using Make
 
 ### To run all microservices will have a different command
@@ -107,6 +109,12 @@
       "command": "cd docker && docker-compose up -d",
       "request": "launch"
     },
+    {
+      "type": "node-terminal",
+      "name": "Frontend",
+      "command": "cd price_catalog_frontend && npm start",
+      "request": "launch"
+    }
   ]
 }
 ```
