@@ -12,6 +12,7 @@ import lombok.Setter;
 public class QueueService {
     private static QueueService instance;
     private ConcurrentLinkedQueue<Domain> queue = new ConcurrentLinkedQueue<>();
+    private Domain polledDomain = null;
 
     private QueueService() {
     }

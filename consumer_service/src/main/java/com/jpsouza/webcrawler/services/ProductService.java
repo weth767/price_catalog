@@ -98,7 +98,11 @@ public class ProductService {
         return brandRepository.save(brand);
     }
 
-    public Page<ResponseProductDTO> getProductsPaged(Pageable pageable) {
+    public Page<ResponseProductDTO> getProductsPaged(String description, Pageable pageable) {
+        if (Objects.nonNull(description) && !description.isEmpty()) {
+            return productRepository.findByDescriptionLikeIgnoreCaseOrBrand_DescriptionLikeIgnoreCaseOrderByIdAsc(description, description, pageable)
+                    .map(responseProductMapper::productToResponseProductDTO);
+        }
         return productRepository.findAll(pageable).map(responseProductMapper::productToResponseProductDTO);
     }
 

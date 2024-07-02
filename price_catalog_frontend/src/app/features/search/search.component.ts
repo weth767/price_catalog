@@ -1,8 +1,14 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  signal,
+} from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { PaginatorState } from 'primeng/paginator';
-import { finalize } from 'rxjs';
+import { finalize } from 'rxjs/internal/operators/finalize';
 import { CustomDialogConfig } from '../../core/models/custom-dialog/custom-dialog-config';
 import { Page } from '../../core/models/page';
 import { Product } from '../../core/models/product';
@@ -10,36 +16,41 @@ import { CustomDialogService } from '../../core/services/custom-dialog/custom-di
 import { ProductService } from '../../core/services/product/product.service';
 
 @Component({
-  selector: 'app-product',
-  templateUrl: './product.component.html',
-  styleUrl: './product.component.scss',
+  selector: 'app-search',
+  templateUrl: './search.component.html',
+  styleUrl: './search.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductComponent implements OnInit {
+export class SearchComponent implements OnInit {
   @BlockUI() blockUI!: NgBlockUI;
   public products?: Page<Product>;
   page = 0;
   pageSize = 20;
   first = 0;
-  isLoading = false;
+  isLoading = signal(false);
+  description = '';
 
   constructor(
     private productService: ProductService,
-    private customDialogService: CustomDialogService
+    private customDialogService: CustomDialogService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.getData(this.page, this.pageSize);
+    this.description = this.route.snapshot.queryParamMap.get('descricao') ?? '';
+    console.log(this.description);
+    this.getData(this.description, this.page, this.pageSize);
   }
 
-  public getData(page: number, pageSize: number): void {
+  public getData(description: string, page: number, pageSize: number): void {
     this.blockUI.start('Carregando');
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.productService
-      .getProducts(page, pageSize)
+      .getProductsByDescription(description, page, pageSize)
       .pipe(
         finalize(() => {
           this.blockUI.stop();
-          this.isLoading = false;
+          this.isLoading.set(false);
         })
       )
       .subscribe({
@@ -61,7 +72,7 @@ export class ProductComponent implements OnInit {
     this.page = event.page ?? 0;
     this.first = event.first ?? 0;
     this.pageSize = event.rows ?? 20;
-    this.getData(this.page, this.pageSize);
+    this.getData(this.description, this.page, this.pageSize);
   }
 
   public get isEmpty(): boolean {

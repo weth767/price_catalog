@@ -6,8 +6,10 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { finalize } from 'rxjs';
 import { ChartData } from '../../../../core/models/chart-data';
 import { ChartOptions } from '../../../../core/models/chart-options';
+import { CustomDialogConfig } from '../../../../core/models/custom-dialog/custom-dialog-config';
 import { Product } from '../../../../core/models/product';
 import { ProductPrice } from '../../../../core/models/product-price';
+import { CustomDialogService } from '../../../../core/services/custom-dialog/custom-dialog.service';
 import { ProductService } from '../../../../core/services/product/product.service';
 import { DateUtil } from '../../../../shared/util/date-util';
 
@@ -24,7 +26,8 @@ export class ProductInfoComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private productService: ProductService
+    private productService: ProductService,
+    private customDialogService: CustomDialogService
   ) {}
 
   ngOnInit(): void {
@@ -39,8 +42,12 @@ export class ProductInfoComponent implements OnInit {
           this.initChart();
         },
         error: (error: HttpErrorResponse) => {
-          console.log(error);
-          alert(error.message);
+          let config = new CustomDialogConfig();
+          config.header = 'Ocorreu um erro';
+          config.data.text = error?.message;
+          config.data.showCancelButton = false;
+          config.data.confirmButtonText = 'OK';
+          this.customDialogService.showDialog(config);
         },
       });
   }

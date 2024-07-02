@@ -39,13 +39,19 @@ const routes: Routes = [
     canActivate: [authGuard],
   },
   {
+    path: 'buscar',
+    loadChildren: () =>
+      import('./features/search/search.module').then((m) => m.SearchModule),
+    canActivate: [authGuard],
+  },
+  {
     path: '**',
     redirectTo: '',
   },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

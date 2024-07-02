@@ -1,6 +1,7 @@
 package com.jpsouza.webcrawler.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,5 +36,10 @@ public class ExplorationController {
     public ResponseEntity<MessageResponseDTO> stopCrawler() {
         explorationService.stopExploration();
         return ResponseEntity.ok(new MessageResponseDTO("Crawler foi finalizado com sucesso!"));
+    }
+
+    @GetMapping
+    public ResponseEntity<Boolean> verifyIsCrawlerRunning() {
+        return ResponseEntity.ok(explorationService.verifyIsCrawlerRunning());
     }
 }

@@ -119,4 +119,27 @@ export class DomainComponent implements OnInit {
       },
     });
   }
+
+  public verifyIsCrawlerRunning(): void {
+    this.crawlerService.verifyIsCrawlerRunning().subscribe({
+      next: (isRunning: boolean) => {
+        let config = new CustomDialogConfig();
+        config.header = 'Informação';
+        config.data.text = isRunning
+          ? 'O explorador está sendo executado'
+          : 'O explorador não está sendo executado';
+        config.data.showCancelButton = false;
+        config.data.confirmButtonText = 'OK';
+        this.customDialogService.showDialog(config);
+      },
+      error: (err: HttpErrorResponse) => {
+        let config = new CustomDialogConfig();
+        config.header = 'Ocorreu um erro';
+        config.data.text = err?.message;
+        config.data.showCancelButton = false;
+        config.data.confirmButtonText = 'OK';
+        this.customDialogService.showDialog(config);
+      },
+    });
+  }
 }

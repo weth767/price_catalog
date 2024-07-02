@@ -4,8 +4,10 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { MenuItem } from 'primeng/api';
 import { PaginatorState } from 'primeng/paginator';
 import { finalize } from 'rxjs/internal/operators/finalize';
+import { CustomDialogConfig } from '../../core/models/custom-dialog/custom-dialog-config';
 import { Link } from '../../core/models/link';
 import { Page } from '../../core/models/page';
+import { CustomDialogService } from '../../core/services/custom-dialog/custom-dialog.service';
 import { LinkService } from '../../core/services/link/link.service';
 import { BreadcrumbUtils } from '../../shared/util/breadcrumb-utils';
 
@@ -25,7 +27,11 @@ export class LinkComponent implements OnInit {
   breadcrumbItems = new Array<MenuItem>();
   home!: MenuItem;
 
-  constructor(private route: ActivatedRoute, private linkService: LinkService) {
+  constructor(
+    private route: ActivatedRoute,
+    private linkService: LinkService,
+    private customDialogService: CustomDialogService
+  ) {
     this.domain = this.route.snapshot.queryParamMap.get('dominio');
   }
 
@@ -63,7 +69,12 @@ export class LinkComponent implements OnInit {
           this.links = links;
         },
         error: (error) => {
-          console.log(error);
+          let config = new CustomDialogConfig();
+          config.header = 'Ocorreu um erro';
+          config.data.text = error?.message;
+          config.data.showCancelButton = false;
+          config.data.confirmButtonText = 'OK';
+          this.customDialogService.showDialog(config);
         },
       });
   }

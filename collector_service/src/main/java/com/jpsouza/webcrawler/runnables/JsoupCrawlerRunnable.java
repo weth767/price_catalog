@@ -3,6 +3,7 @@ package com.jpsouza.webcrawler.runnables;
 import java.util.Set;
 
 import com.jpsouza.webcrawler.crawlers.JSoupCrawler;
+import com.jpsouza.webcrawler.services.QueueService;
 
 public class JsoupCrawlerRunnable implements Runnable {
     private final JSoupCrawler jSoupCrawler;
@@ -22,6 +23,8 @@ public class JsoupCrawlerRunnable implements Runnable {
         try {
             this.jSoupCrawler.startCrawler(this.crawlers, this.urls, this.reset);
         } catch (Exception e) {
+            QueueService.getInstance().getQueue().clear();
+            QueueService.getInstance().setPolledDomain(null);
             throw new IllegalStateException(e);
         }
     }

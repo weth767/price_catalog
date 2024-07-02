@@ -38,27 +38,37 @@ public class JSoupCrawler {
 
     public void startCrawler(int crawlers, Set<String> urls, boolean reset) throws Exception {
         domainService.upsertAll(urls);
-        executorService = Executors.newFixedThreadPool(crawlers);
-        if (reset && QueueService.getInstance().getQueue().isEmpty()) {
+        boolean isRunning = Objects.nonNull(QueueService.getInstance().getPolledDomain())
+                || !QueueService.getInstance().getQueue().isEmpty();
+        if (Objects.isNull(executorService) || !isRunning) {
+            executorService = Executors.newFixedThreadPool(crawlers);
+        }
+        if (reset && !isRunning) {
             linkService.resetAllLinks();
         }
         List<Domain> domainList = domainService.findByUrlInOrderByIdAsc(urls);
         QueueService.getInstance().getQueue().addAll(domainList);
         while (!QueueService.getInstance().getQueue().isEmpty()) {
             Domain domain = QueueService.getInstance().getQueue().poll();
+            QueueService.getInstance().setPolledDomain(domain);
             explore(domain.url, domain, domain.url);
         }
+        QueueService.getInstance().setPolledDomain(null);
     }
 
     public void startCompleteCrawling(int crawler) throws Exception {
-        if (QueueService.getInstance().getQueue().isEmpty()) {
+        boolean isRunning = Objects.nonNull(QueueService.getInstance().getPolledDomain())
+                || !QueueService.getInstance().getQueue().isEmpty();
+        if (isRunning) {
             List<Domain> domains = domainService.findAll();
             linkService.resetAllLinks();
             QueueService.getInstance().getQueue().addAll(domains);
             while (!QueueService.getInstance().getQueue().isEmpty()) {
                 Domain domain = QueueService.getInstance().getQueue().poll();
+                QueueService.getInstance().setPolledDomain(domain);
                 explore(domain.url, domain, domain.url);
             }
+            QueueService.getInstance().setPolledDomain(null);
         }
     }
 
@@ -91,5 +101,6 @@ public class JSoupCrawler {
             LOGGER.info("Serviço parado");
         }
         QueueService.getInstance().getQueue().clear();
+        QueueService.getInstance().setPolledDomain(null);
     }
 }

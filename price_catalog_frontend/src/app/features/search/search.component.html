@@ -2,13 +2,13 @@
 <app-toolbar />
 <app-navbar />
 <main>
-  @if(isLoading) {
+  @if(isLoading()) {
   <div
     class="w-full md:h-[538px] h-72 flex flex-col justify-center items-center"
   >
     <p class="text-center text-xl loading">Carregando informações</p>
   </div>
-  } @else { @if(products?.content?.length == 0) {
+  } @else if(products?.content?.length == 0) {
   <div
     class="w-full md:h-[538px] h-72 flex flex-col justify-center items-center"
   >
@@ -28,6 +28,5 @@
     [totalRecords]="products?.totalElements"
     [rowsPerPageOptions]="[10, 20, 30]"
   />
-  }
 </main>
 <app-footer />

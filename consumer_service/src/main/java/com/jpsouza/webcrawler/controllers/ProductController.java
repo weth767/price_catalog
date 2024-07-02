@@ -33,9 +33,10 @@ public class ProductController {
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int pageSize,
             @RequestParam(required = false, defaultValue = "ASC") Direction direction,
-            @RequestParam(required = false, defaultValue = "id") String sort) {
+            @RequestParam(required = false, defaultValue = "id") String sort,
+            @RequestParam(required = false) String description) {
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sort));
-        return new ResponseEntity<>(productService.getProductsPaged(pageable), HttpStatus.OK);
+        return new ResponseEntity<>(productService.getProductsPaged(description, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

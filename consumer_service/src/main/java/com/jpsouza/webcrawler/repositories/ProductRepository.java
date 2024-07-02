@@ -14,4 +14,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "SELECT code FROM product WHERE code = (SELECT MAX(code) FROM product)", nativeQuery = true)
     Long getLastCode();
+
+    Page<Product> findByDescriptionLikeIgnoreCaseOrBrand_DescriptionLikeIgnoreCaseOrderByIdAsc(@NonNull String description, @NonNull String description1, Pageable pageable);
 }

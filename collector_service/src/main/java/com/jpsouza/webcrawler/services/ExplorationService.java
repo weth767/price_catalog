@@ -39,4 +39,9 @@ public class ExplorationService {
         }
         jSoupCrawler.stopCrawler();
     }
+
+    public boolean verifyIsCrawlerRunning() {
+        return Objects.nonNull(QueueService.getInstance().getPolledDomain())
+                || !QueueService.getInstance().getQueue().isEmpty();
+    }
 }

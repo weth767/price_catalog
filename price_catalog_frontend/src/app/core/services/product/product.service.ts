@@ -24,6 +24,20 @@ export class ProductService {
     });
   }
 
+  public getProductsByDescription(
+    description: string,
+    page: number,
+    pageSize: number
+  ): Observable<Page<Product>> {
+    var params = new HttpParams();
+    params = params.append('description', description);
+    params = params.append('page', page.toString());
+    params = params.append('pageSize', pageSize.toString());
+    return this.http.get<Page<Product>>(`${this.url}/product`, {
+      params: params,
+    });
+  }
+
   public getProductById(id: number): Observable<Product> {
     return this.http.get<Product>(`${this.url}/product/${id}`);
   }
