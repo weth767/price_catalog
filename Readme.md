@@ -119,6 +119,8 @@
 }
 ```
 
+### to login can be used username [admin] or <admin@pricecatalog.com> with password: 123456
+
 ### [Optional] Some configurations(settings.json) to set in VSCode to run Java projects
 
 ```json
