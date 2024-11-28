@@ -19,7 +19,7 @@ public class CosineStrategyService implements OntologyStrategyService {
                             product.getDescription(),
                             word);
                     product.setScore(similarity);
-                }).filter((product) -> product.getScore() < 0.35)
+                }).filter((product) -> product.getScore() < 0.35 || product.getDescription().trim().equalsIgnoreCase(word.trim()))
                 .sorted(Comparator.comparing(Product::getScore)).toList();
         return filteredProducts.isEmpty() ? null : filteredProducts.get(0);
     }
