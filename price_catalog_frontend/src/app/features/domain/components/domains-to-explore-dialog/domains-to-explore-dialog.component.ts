@@ -23,12 +23,12 @@ export class DomainsToExploreDialogComponent {
       Validators.compose([
         Validators.required,
         Validators.minLength(1),
-        Validators.pattern('^https?://[^s,]+$'),
+        /*  Validators.pattern('^https?://[^s,]+$'), */
       ])
     ),
     reset: new FormControl(false, Validators.required),
     crawlers: new FormControl(
-      1,
+      100,
       Validators.compose([
         Validators.required,
         Validators.max(1000),

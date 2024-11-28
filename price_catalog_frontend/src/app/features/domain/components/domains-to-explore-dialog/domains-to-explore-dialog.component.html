@@ -31,7 +31,7 @@
       class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex justify-center items-center me-2 gap-1"
     >
       @if (loading) {
-      <img src="/assets/loading_white.svg" class="w-4 h-4" />
+      <img alt="carregando" src="/assets/loading_white.svg" class="w-4 h-4" />
       } @else {
       <svg
         class="w-4 h-4 text-white"
@@ -57,8 +57,12 @@
       type="button"
       class="text-blue-gray-900 w-full bg-gray-300 hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex justify-center items-center me-2 gap-1"
     >
-      @if (loading) {<img src="/assets/loading_black.svg" class="w-4 h-4" /> }
-      @else {
+      @if (loading) {<img
+        alt="carregando"
+        src="/assets/loading_black.svg"
+        class="w-4 h-4"
+      />
+      } @else {
       <svg
         class="w-4 h-4 text-gray-800"
         aria-hidden="true"

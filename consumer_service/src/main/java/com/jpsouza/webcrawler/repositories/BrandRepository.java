@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, Long> {
     @Query(value = "SELECT code FROM brand WHERE code = (SELECT MAX(code) FROM brand)", nativeQuery = true)
@@ -18,4 +20,7 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
             "group by b.id " +
             "order by amountReferences desc", nativeQuery = true)
     Page<BrandCountProjection> getTopProductBrandPaged(Pageable pageable);
+
+    Optional<Brand> findByCode(Long code);
+
 }

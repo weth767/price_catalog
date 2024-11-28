@@ -13,65 +13,70 @@ spring:
             uri: http://localhost:8761/eureka/
       routes:
         - id: producer-service
-          uri: http://localhost:8082 #lb://producer-service
+          #uri: http://localhost:8082
+          uri: lb://producer-service
           predicates:
             - Path=/producer/**
           filters:
             - StripPrefix=1
           metadata:
             cors:
-              allowedOrigins: '*'
-              allowedMethods: '*'
-              allowedHeaders: '*'
-              maxAge: 30
+              allowedOrigins: "*"
+              allowedMethods: "*"
+              allowedHeaders: "*"
+              maxAge: 30000
         - id: collector-service
-          uri: http://localhost:8081 #lb://collector-service
+          #uri: http://localhost:8081
+          uri: lb://collector-service
           predicates:
             - Path=/collector/**
           filters:
             - StripPrefix=1
           metadata:
             cors:
-              allowedOrigins: '*'
-              allowedMethods: '*'
-              allowedHeaders: '*'
-              maxAge: 30
+              allowedOrigins: "*"
+              allowedMethods: "*"
+              allowedHeaders: "*"
+              maxAge: 30000
         - id: consumer-service
-          uri: http://localhost:8083 #lb://consumer-service
+          #uri: http://localhost:8083
+          uri: lb://consumer-service
           predicates:
             - Path=/consumer/**
           filters:
             - StripPrefix=1
           metadata:
             cors:
-              allowedOrigins: '*'
-              allowedMethods: '*'
-              allowedHeaders: '*'
-              maxAge: 30
+              allowedOrigins: "*"
+              allowedMethods: "*"
+              allowedHeaders: "*"
+              maxAge: 30000
         - id: classifier-service
-          uri: http://localhost:8084 #lb://classifier-service
+          #uri: http://localhost:8084
+          uri: lb://classifier-service
           predicates:
             - Path=/classifier/**
           filters:
             - StripPrefix=1
           metadata:
             cors:
-              allowedOrigins: '*'
-              allowedMethods: '*'
-              allowedHeaders: '*'
-              maxAge: 30
+              allowedOrigins: "*"
+              allowedMethods: "*"
+              allowedHeaders: "*"
+              maxAge: 30000
         - id: user-service
-          uri: http://localhost:8085 #lb://user-service
+          #uri: http://localhost:8085
+          uri: lb://user-service
           predicates:
             - Path=/user/**
           filters:
             - StripPrefix=1
           metadata:
             cors:
-              allowedOrigins: '*'
-              allowedMethods: '*'
-              allowedHeaders: '*'
-              maxAge: 30
+              allowedOrigins: "*"
+              allowedMethods: "*"
+              allowedHeaders: "*"
+              maxAge: 30000
 eureka:
   client:
     service-url:

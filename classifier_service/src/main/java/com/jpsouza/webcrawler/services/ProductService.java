@@ -1,5 +1,6 @@
 package com.jpsouza.webcrawler.services;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,12 +30,20 @@ public class ProductService {
                 throw new Exception("Dados incompletos para adicionar o produto");
             }
             Brand brand = null;
-            if (Objects.nonNull(possibleProduct.getBrand())) {
+            /*if (Objects.nonNull(possibleProduct.getBrand())) {
                 Query query = new TextQuery(possibleProduct.getBrand()).includeScore().sortByScore();
                 List<Brand> brands = mongoTemplate.find(query, Brand.class);
-                brand = brands.isEmpty() ? null : brands.get(0);
-            }
-            if (Objects.isNull(brand) && Objects.nonNull(possibleProduct.getBrand())) {
+                List<Brand> filteredBrands = brands.stream()
+                        .peek((brandToCompare) -> {
+                            double similarity = new info.debatty.java.stringsimilarity.Cosine().distance(
+                                    brandToCompare.getDescription(),
+                                    possibleProduct.getBrand());
+                            brandToCompare.setScore(similarity);
+                        }).filter((brandToCompare) -> brandToCompare.getScore() < 0.35)
+                        .sorted(Comparator.comparing(Brand::getScore)).toList();
+                brand = filteredBrands.isEmpty() ? null : filteredBrands.get(0);
+            }*/
+            if (Objects.nonNull(possibleProduct.getBrand())) {
                 Brand newBrand = new Brand();
                 newBrand.setCode(getNextBrandCode());
                 newBrand.setDescription(possibleProduct.getBrand());
@@ -43,22 +52,27 @@ public class ProductService {
             if (Objects.isNull(possibleProduct.getDescription())) {
                 throw new Exception("Dados incompletos para adicionar o produto");
             }
-            Product product = new Product();
-            if (Objects.nonNull(brand)) {
-                BrandProduct brandProduct = new BrandProduct();
-                brandProduct.setDescription(brand.getDescription());
-                brandProduct.setCode(brand.getCode());
-                brandProduct.setId(brand.getCode());
-                product.setBrand(brandProduct);
-            }
-            product.setCode(getNextProductCode());
-            product.setDescription(possibleProduct.getDescription());
-            product.setImageUrl(possibleProduct.getImageUrl());
-            product.setPrice(possibleProduct.getPrice());
+            Product product = getProduct(possibleProduct, brand);
             return mongoTemplate.save(product);
         } catch (Exception e) {
             throw new Exception("Erro ao salvar o produto");
         }
+    }
+
+    private Product getProduct(PossibleProductDTO possibleProduct, Brand brand) throws Exception {
+        Product product = new Product();
+        if (Objects.nonNull(brand)) {
+            BrandProduct brandProduct = new BrandProduct();
+            brandProduct.setDescription(brand.getDescription());
+            brandProduct.setCode(brand.getCode());
+            brandProduct.setId(brand.getCode());
+            product.setBrand(brandProduct);
+        }
+        product.setCode(getNextProductCode());
+        product.setDescription(Objects.nonNull(possibleProduct.getName()) ? possibleProduct.getName() : possibleProduct.getDescription());
+        product.setImageUrl(possibleProduct.getImageUrl());
+        product.setPrice(possibleProduct.getPrice());
+        return product;
     }
 
     @SuppressWarnings("null")

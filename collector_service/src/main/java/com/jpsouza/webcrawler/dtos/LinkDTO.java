@@ -1,7 +1,7 @@
 package com.jpsouza.webcrawler.dtos;
 
-import com.jpsouza.webcrawler.models.Domain;
 import java.time.LocalDateTime;
+
 import lombok.Data;
 
 @Data

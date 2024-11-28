@@ -23,7 +23,7 @@ export class CrawlerService {
   }
 
   public stopExploration(): Observable<MessageResponse> {
-    return this.http.put<MessageResponse>(`${this.url}/start`, {});
+    return this.http.put<MessageResponse>(`${this.url}/stop`, {});
   }
 
   public verifyIsCrawlerRunning(): Observable<boolean> {

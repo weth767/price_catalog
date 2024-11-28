@@ -20,12 +20,22 @@ clean_install_user:
 	@echo "Executing clean install in User service"
 	@cd user_service && .\mvnw clean install
 
+clean_install_gateway:
+	@echo "Executing clean install in gateway service"
+	@cd gateway_service && .\mvnw clean install
+
+clean_install_eureka:
+	@echo "Executing clean install in eureka service"
+	@cd eureka_service && .\mvnw clean install
+
 clean_install_all:
 	@echo "Executing clean install"
 	@cd classifier_service && .\mvnw clean install
 	@cd collector_service && .\mvnw clean install
 	@cd consumer_service && .\mvnw clean install
 	@cd producer_service && .\mvnw clean install
+	@cd gateway_service && .\mvnw clean install
+	@cd eureka_service && .\mvnw clean install
 
 docker_compose:
 	@echo "Executing docker compose up detached"

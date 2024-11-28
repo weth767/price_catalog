@@ -1,7 +1,9 @@
 <div class="flex flex-col w-full gap-2">
   <h2 class="mb-0 px-8 !mt-4">Top marcas</h2>
   @if (loading) {
-  <p class="text-center text-xl loading">Carregando informações</p>
+  <p class="text-center text-xl loading min-h-[300px]">
+    Carregando informações
+  </p>
   } @else if(!brands?.content?.length) {
   <div
     class="w-full md:h-[338px] h-72 flex flex-col justify-center items-center"
@@ -22,7 +24,11 @@
     </ng-template>
   </p-carousel>
   <div class="flex flex-row items-center justify-end px-8">
-    <span matRipple class="flex flex-row gap-2 cursor-pointer">
+    <a
+      matRipple
+      class="flex flex-row gap-2 cursor-pointer no-underline active:no-underline text-gray-900"
+      href="/marcas"
+    >
       <svg
         class="w-6 h-6 text-gray-800 dark:text-white"
         aria-hidden="true"
@@ -41,7 +47,7 @@
         />
       </svg>
       Ver todas as marcas
-    </span>
+    </a>
   </div>
   }
 </div>

@@ -66,7 +66,7 @@ public class OntologyCallable implements Callable<Product> {
             query = new TextQuery(possibleProduct.getDescription());
         }
         List<Product> products = mongoTemplate.find(query, Product.class);
-        return services.get(this.similarityMethod).compareSimilarity(products, possibleProduct.getDescription());
+        return services.get(this.similarityMethod).compareSimilarity(products, Objects.nonNull(possibleProduct.getName()) ? possibleProduct.getName() : possibleProduct.getDescription());
     }
 
 }

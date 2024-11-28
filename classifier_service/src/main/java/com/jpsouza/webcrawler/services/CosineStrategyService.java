@@ -14,12 +14,11 @@ public class CosineStrategyService implements OntologyStrategyService {
     @Override
     public Product compareSimilarity(List<Product> products, @NonNull String word) {
         List<Product> filteredProducts = products.stream()
-                .map((product) -> {
+                .peek((product) -> {
                     double similarity = new info.debatty.java.stringsimilarity.Cosine().distance(
                             product.getDescription(),
                             word);
                     product.setScore(similarity);
-                    return product;
                 }).filter((product) -> product.getScore() < 0.35)
                 .sorted(Comparator.comparing(Product::getScore)).toList();
         return filteredProducts.isEmpty() ? null : filteredProducts.get(0);

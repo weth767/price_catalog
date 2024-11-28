@@ -40,6 +40,9 @@ public class ProductPageRunnable implements Runnable {
     }
 
     private ProductDTO getDataFromSchema(Element element) throws IOException {
+        if (Objects.isNull(element)) {
+            return null;
+        }
         // Removidas as ocorrencias da seguinte sequencia \\", que atrapalhava na
         // conversão do json
         try {
@@ -120,11 +123,24 @@ public class ProductPageRunnable implements Runnable {
 
     }
 
-    private ProductDTO getData(Document document) throws IOException {
+    private ProductDTO getData(Document document, String url) throws IOException {
         ProductDTO product = null;
         Elements elements = document.select("script[type=application/ld+json]");
         if (!elements.isEmpty()) {
-            Element schema = elements.first();
+            Element schema = elements.stream().filter((element) -> {
+                try {
+                    String json = element.html().replaceAll("\\\\\\\\\"", "");
+                    Map<?, ?> schemaMap = new GsonBuilder().setLenient().setPrettyPrinting().disableHtmlEscaping().create()
+                            .fromJson(json, Map.class);
+                    if (schemaMap.containsKey("@type") && schemaMap.get("@type").toString().equalsIgnoreCase("product")) {
+                        return true;
+                    }
+                    return schemaMap.containsKey("@graph");
+                } catch (Exception ignored) {
+                    System.out.printf("Link com application/ld+json foram dos padrões: $s%n", url);
+                    return false;
+                }
+            }).findFirst().orElse(null);
             product = getDataFromSchema(schema);
         }
         // ler script baseado na "after interactive" do nextjs, onde o script é exibido
@@ -181,7 +197,7 @@ public class ProductPageRunnable implements Runnable {
             HtmlUnitDriver driver = getDriver(false);
             driver.get(url);
             Document document = Jsoup.parse(driver.getPageSource());
-            ProductDTO productDTO = getData(document);
+            ProductDTO productDTO = getData(document, url);
             if (Objects.nonNull(productDTO)) {
                 linkRepository.updateProductLink(url);
                 String json = new Gson().toJson(productDTO);
@@ -192,8 +208,9 @@ public class ProductPageRunnable implements Runnable {
             driver = getDriver(true);
             driver.get(url);
             document = Jsoup.parse(driver.getPageSource());
-            productDTO = getData(document);
+            productDTO = getData(document, url);
             if (Objects.nonNull(productDTO)) {
+                System.out.println("PRODUTO: " + (Objects.nonNull(productDTO.getName()) ? productDTO.getName() : productDTO.getDescription()));
                 linkRepository.updateProductLink(url);
                 String json = new Gson().toJson(productDTO);
                 kafkaProducer.sendMessage(json);

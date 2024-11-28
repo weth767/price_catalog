@@ -86,11 +86,12 @@ public class ProductService {
         productRepository.saveAndFlush(newProduct);
     }
 
+    //todo está buscando a marca erroneamente, verificar o que pode ser feito
     private Brand generateBrand(FeignClientBrand feignClientBrand) {
-        Optional<Brand> optionalBrand = brandRepository.findById(Long.parseLong(feignClientBrand.getCode().toString()));
+        /*Optional<Brand> optionalBrand = brandRepository.findByCode(Long.parseLong(feignClientBrand.getCode().toString()));
         if (optionalBrand.isPresent()) {
             return optionalBrand.get();
-        }
+        }*/
         Brand brand = new Brand();
         Long lastCode = brandRepository.getLastCode() + 1;
         brand.setCode(lastCode);
