@@ -54,16 +54,16 @@ public class OntologyCallable implements Callable<Product> {
     @Override
     public Product call() throws Exception {
         Query query;
-        if (Objects.isNull(possibleProduct.getDescription())) {
+        if (Objects.isNull(possibleProduct.getName()) && Objects.isNull(possibleProduct.getDescription())) {
             return null;
         }
         if (!services.containsKey(similarityMethod)) {
             return null;
         }
         if (similarityMethod.equals(SimilarityMethod.MONGOSCORE)) {
-            query = new TextQuery(possibleProduct.getDescription()).includeScore().sortByScore();
+            query = new TextQuery(Objects.nonNull(possibleProduct.getName()) ? possibleProduct.getName() : possibleProduct.getDescription()).includeScore().sortByScore();
         } else {
-            query = new TextQuery(possibleProduct.getDescription());
+            query = new TextQuery(Objects.nonNull(possibleProduct.getName()) ? possibleProduct.getName() : possibleProduct.getDescription());
         }
         List<Product> products = mongoTemplate.find(query, Product.class);
         return services.get(this.similarityMethod).compareSimilarity(products, Objects.nonNull(possibleProduct.getName()) ? possibleProduct.getName() : possibleProduct.getDescription());
