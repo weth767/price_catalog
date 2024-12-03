@@ -4,11 +4,11 @@
       <img
         [id]="'productImage_' + product.id"
         class="w-full scale-50"
-        [alt]="'Imagem do produto ' + product.description"
+        [alt]="'Imagem do produto ' + (product.name ?? product.description)"
         src="/assets/box.png"
       />
-      <span class="!line-clamp-3 h-16 text-ellipsis text-sm">{{
-        product.description
+      <span class="line-clamp-3 h-[60px] text-ellipsis text-sm">{{
+        product.name ?? product.description
       }}</span>
       <span class="text-sm mb-4">{{
         product.productPrices![product.productPrices!.length - 1].price
