@@ -40,6 +40,10 @@ spring:
       products: 6bb2322a221e8674e135be0a38698e94839900197a60e442b4a1e63e3256c40e
       links: 953859498b12b7926ee33080400ca65b0dc17de0c3e24828a13e6e4f06704bbf
 eureka:
+  instance:
+    prefer-ip-address: false
+    hostname: host.docker.internal
+    instance-id: host.docker.internal:${spring.application.name}:${server.port}
   client:
     service-url:
       default-zone: http://localhost:8761/eureka/

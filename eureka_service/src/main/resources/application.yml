@@ -5,7 +5,8 @@ server:
   port: 8761
 eureka:
   instance:
-    preferIpAddress: true
+    hostname: host.docker.internal
+    preferIpAddress: false
   client:
     register-with-eureka: false
     fetch-registry: false
