@@ -16,17 +16,26 @@ spring:
       ddl-auto: update
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5433/webcrawlerconsumer
-    username: root
-    password: root
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driverClassName: org.postgresql.Driver
     initialization-mode: always
     continue-on-error: true
+    type: org.apache.commons.dbcp2.BasicDataSource
+    hikari:
+      initialization-fail-timeout: 0
+      allow-pool-suspension: true
+      minimum-idle: 5
+      maximum-pool-size: 10
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      pool-name: HikariPool-1
   liquibase:
     change-log: classpath:master.xml
   kafka:
     consumer:
-      bootstrap-servers: 127.0.0.1:9092
+      bootstrap-servers: ${KAFKA_CONSUMER_BOOTSTRAP_SERVERS}
       group-id: webcrawler
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -34,13 +43,13 @@ spring:
     topics:
       products: 6bb2322a221e8674e135be0a38698e94839900197a60e442b4a1e63e3256c40e
 eureka:
-  instance:
-    prefer-ip-address: false
-    hostname: host.docker.internal
-    instance-id: host.docker.internal:${spring.application.name}:${server.port}
+  #instance:
+  #prefer-ip-address: false
+  #hostname: host.docker.internal
+  #instance-id: host.docker.internal:${spring.application.name}:${server.port}
   client:
     service-url:
-      default-zone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
     register-with-eureka: true
     fetch-registry: true
 feign:
@@ -54,9 +63,9 @@ feign:
         connectTimeout: 160000000
         readTimeout: 160000000
   classifier:
-    url: localhost:8080/classifier
+    url: ${GATEWAY_SERVICE_URL::http://localhost:8080/classifier}
   user:
-    url: localhost:8080/user
+    url: ${GATEWAY_SERVICE_URL:http://localhost:8080/user}
 security:
   jwt:
     secret-key: 0cfa66a2831fa1659ac22cad8fd1063c502b20ff5554701f8f0224a5273d7234
@@ -66,3 +75,4 @@ logging:
     root: INFO
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG
+    com.zaxxer.hikari: DEBUG

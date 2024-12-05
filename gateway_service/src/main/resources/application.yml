@@ -10,7 +10,7 @@ spring:
           enabled: true
           lower-case-service-id: true
           eureka:
-            uri: http://localhost:8761/eureka/
+            uri: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
       routes:
         - id: producer-service
           #uri: http://localhost:8082
@@ -78,12 +78,12 @@ spring:
               allowedHeaders: "*"
               maxAge: 30000
 eureka:
-  instance:
-    prefer-ip-address: false
-    hostname: host.docker.internal
-    instance-id: host.docker.internal:${spring.application.name}:${server.port}
+  #instance:
+  #prefer-ip-address: true
+  #hostname: host.docker.internal
+  #instance-id: host.docker.internal:${spring.application.name}:${server.port}
   client:
     service-url:
-      default-zone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
     register-with-eureka: true
     fetch-registry: true

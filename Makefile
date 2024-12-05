@@ -41,6 +41,14 @@ docker_compose:
 	@echo "Executing docker compose up detached"
 	@cd docker && docker-compose up -d
 
+docker_compose_build:
+	@echo "Executing docker compose up build detached"
+	@cd docker && docker-compose up --build -d
+
+docker_compose_down:
+	@echo "Stoping docker compose"
+	@cd docker && docker-compose down
+
 run_classifier:
 	@echo "Running Classifier service"
 	@cd classifier_service && .\mvnw spring-boot:run

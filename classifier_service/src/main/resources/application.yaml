@@ -12,15 +12,15 @@ spring:
         local-port: 8094
   data:
     mongodb:
-      uri: mongodb://root:root@localhost:27017/webcrawlerclassifier?authSource=admin
+      uri: mongodb://${MONGO_DB_USER}:${MONGO_DB_PASSWORD}@${MONGO_DB_HOST}:${MONGO_DB_PORT}/${MONGO_DB_COLLECTION}?authSource=admin
 eureka:
-  instance:
-    prefer-ip-address: false
-    hostname: host.docker.internal
-    instance-id: host.docker.internal:${spring.application.name}:${server.port}
+  #instance:
+  #prefer-ip-address: false
+  #hostname: host.docker.internal
+  #instance-id: host.docker.internal:${spring.application.name}:${server.port}
   client:
     service-url:
-      default-zone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
     register-with-eureka: true
     fetch-registry: true
 feign:
@@ -34,7 +34,7 @@ feign:
         connectTimeout: 160000000
         readTimeout: 160000000
   user:
-    url: localhost:8080/user
+    url: ${GATEWAY_SERVICE_URL:http://localhost:8080/user}
 security:
   jwt:
     secret-key: 0cfa66a2831fa1659ac22cad8fd1063c502b20ff5554701f8f0224a5273d7234

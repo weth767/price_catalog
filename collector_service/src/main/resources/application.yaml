@@ -16,9 +16,9 @@ spring:
       ddl-auto: update
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/webcrawlerproducercollector
-    username: root
-    password: root
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driverClassName: org.postgresql.Driver
     initialization-mode: always
     continue-on-error: true
@@ -27,19 +27,19 @@ spring:
     change-log: classpath:master.xml
   kafka:
     producer:
-      bootstrap-servers: 0.0.0.0:9092
+      bootstrap-servers: ${KAFKA_PRODUCER_BOOTSTRAP_SERVERS}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     topics:
       links: 953859498b12b7926ee33080400ca65b0dc17de0c3e24828a13e6e4f06704bbf
 eureka:
-  instance:
-    prefer-ip-address: false
-    hostname: host.docker.internal
-    instance-id: host.docker.internal:${spring.application.name}:${server.port}
+  #instance:
+  #prefer-ip-address: false
+  #hostname: host.docker.internal
+  #instance-id: host.docker.internal:${spring.application.name}:${server.port}
   client:
     service-url:
-      default-zone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
     register-with-eureka: true
     fetch-registry: true
 feign:
@@ -53,7 +53,7 @@ feign:
         connectTimeout: 160000000
         readTimeout: 160000000
   user:
-    url: localhost:8080/user
+    url: ${GATEWAY_SERVICE_URL:http://localhost:8080/user}
 security:
   jwt:
     secret-key: 0cfa66a2831fa1659ac22cad8fd1063c502b20ff5554701f8f0224a5273d7234

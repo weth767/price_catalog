@@ -88,12 +88,152 @@ services:
     environment:
       - KAFKA_CFG_BROKER_ID=1
       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_CFG_NUM_PARTITIONS=3
       - ALLOW_PLAINTEXT_LISTENER=yes
     volumes:
       - "kafka_data:/bitnami"
+
+  eureka-service:
+    container_name: eureka-service
+    build:
+      context: ../eureka_service
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - webcrawler
+    environment:
+      - EUREKA_INSTANCE_HOSTNAME=eureka-service
+      - EUREKA_CLIENT_REGISTER_WITH_EUREKA=false
+      - EUREKA_CLIENT_FETCH_REGISTRY=false
+
+  user-service:
+    container_name: user-service
+    build:
+      context: ../user_service
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    networks:
+      - webcrawler
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-service:8761/eureka
+      - SPRING_PROFILES_ACTIVE=default
+      - DB_HOST=postgresusers
+      - DB_PORT=5432
+      - DB_NAME=webcrawlerusers
+      - DB_USER=root
+      - DB_PASSWORD=root
+    depends_on:
+      - eureka-service
+
+  collector-service:
+    container_name: collector-service
+    build:
+      context: ../collector_service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - webcrawler
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-service:8761/eureka
+      - SPRING_PROFILES_ACTIVE=default
+      - DB_HOST=postgresproducer
+      - DB_PORT=5432
+      - DB_NAME=webcrawlerproducercollector
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - KAFKA_PRODUCER_BOOTSTRAP_SERVERS=http://kafka:9092
+      - GATEWAY_SERVICE_URL=http://gateway-service:8080
+    depends_on:
+      - eureka-service
+
+  producer-service:
+    container_name: producer-service
+    build:
+      context: ../producer_service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    networks:
+      - webcrawler
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-service:8761/eureka
+      - SPRING_PROFILES_ACTIVE=default
+      - DB_HOST=postgresproducer
+      - DB_PORT=5432
+      - DB_NAME=webcrawlerproducercollector
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - KAFKA_PRODUCER_BOOTSTRAP_SERVERS=http://kafka:9092
+      - KAFKA_CONSUMER_BOOTSTRAP_SERVERS=http://kafka:9092
+      - GATEWAY_SERVICE_URL=http://gateway-service:8080
+    depends_on:
+      - eureka-service
+
+  classifier-service:
+    container_name: classifier-service
+    build:
+      context: ../classifier_service
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    networks:
+      - webcrawler
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-service:8761/eureka
+      - SPRING_PROFILES_ACTIVE=default
+      - GATEWAY_SERVICE_URL=http://gateway-service:8080
+      - MONGO_DB_HOST=mongodbclassifier
+      - MONGO_DB_COLLECTION=webcrawlerclassifier
+      - MONGO_DB_PORT=27017
+      - MONGO_DB_USER=root
+      - MONGO_DB_PASSWORD=root
+    depends_on:
+      - eureka-service
+
+  consumer-service:
+    container_name: consumer-service
+    build:
+      context: ../consumer_service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    networks:
+      - webcrawler
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-service:8761/eureka
+      - SPRING_PROFILES_ACTIVE=default
+      - DB_HOST=postgresconsumer
+      - DB_PORT=5432
+      - DB_NAME=webcrawlerconsumer
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - KAFKA_CONSUMER_BOOTSTRAP_SERVERS=http://kafka:9092
+      - GATEWAY_SERVICE_URL=http://gateway-service:8080
+    depends_on:
+      - eureka-service
+
+  gateway-service:
+    container_name: gateway-service
+    build:
+      context: ../gateway_service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - webcrawler
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-service:8761/eureka
+      - SPRING_PROFILES_ACTIVE=default
+    depends_on:
+      - user-service
+      - collector-service
+      - producer-service
+      - classifier-service
 
 volumes:
   postgres_producer:

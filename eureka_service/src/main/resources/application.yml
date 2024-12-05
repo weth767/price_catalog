@@ -5,10 +5,10 @@ server:
   port: 8761
 eureka:
   instance:
-    hostname: host.docker.internal
+    hostname: ${EUREKA_INSTANCE_HOSTNAME}
     preferIpAddress: false
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    register-with-eureka: ${EUREKA_CLIENT_REGISTER_WITH_EUREKA}
+    fetch-registry: ${EUREKA_CLIENT_FETCH_REGISTRY}
   hystrix:
     enabled: true
