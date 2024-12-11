@@ -235,6 +235,33 @@ services:
       - producer-service
       - classifier-service
 
+  ngrok:
+    container_name: ngrok
+    image: ngrok/ngrok:3
+    command: http --url=super-feline-loyal.ngrok-free.app gateway-service:8080
+    environment:
+      - NGROK_AUTHTOKEN=29LNjPjGE3TVqGT22RhANTrQar3_31mDEJ4T1aiBTuypF1SaH
+    depends_on:
+      - gateway-service
+    networks:
+      - webcrawler
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ../price_catalog_frontend
+      dockerfile: Dockerfile
+      args:
+        - BASE_URL="https://super-feline-loyal.ngrok-free.app"
+    environment:
+      - BASE_URL=https://super-feline-loyal.ngrok-free.app
+    networks:
+      - webcrawler
+    ports:
+      - 4200:4200
+    depends_on:
+      - ngrok
+
 volumes:
   postgres_producer:
     driver: local

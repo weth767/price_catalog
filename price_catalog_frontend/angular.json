@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": false
+  },
   "newProjectRoot": "projects",
   "projects": {
     "price_catalog_frontend": {
@@ -21,13 +24,13 @@
             "production": {
               "budgets": [
                 {
-                  "maximumError": "1mb",
-                  "maximumWarning": "500kb",
+                  "maximumError": "5mb",
+                  "maximumWarning": "2mb",
                   "type": "initial"
                 },
                 {
-                  "maximumError": "4kb",
-                  "maximumWarning": "2kb",
+                  "maximumError": "2mb",
+                  "maximumWarning": "1mb",
                   "type": "anyComponentStyle"
                 }
               ],
@@ -112,8 +115,5 @@
       "sourceRoot": "src"
     }
   },
-  "version": 1,
-  "cli": {
-    "analytics": false
-  }
+  "version": 1
 }

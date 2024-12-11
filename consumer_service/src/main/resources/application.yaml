@@ -60,9 +60,9 @@ feign:
         connectTimeout: 160000000
         readTimeout: 160000000
   classifier:
-    url: ${GATEWAY_SERVICE_URL:http://localhost:8080/classifier}
+    url: ${GATEWAY_SERVICE_URL/classifier:http://localhost:8080/classifier}
   user:
-    url: ${GATEWAY_SERVICE_URL:http://localhost:8080/user}
+    url: ${GATEWAY_SERVICE_URL/user:http://localhost:8080/user}
 security:
   jwt:
     secret-key: 0cfa66a2831fa1659ac22cad8fd1063c502b20ff5554701f8f0224a5273d7234
