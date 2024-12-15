@@ -89,10 +89,8 @@ public class JSoupCrawlerCallable implements Callable<Set<String>> {
             Elements links = document.select("a[href~=^" + filteredText + ".*]");
             Elements internalLinks = document.select("a[href~=^/.*]");
             Set<String> newLinks = links.stream().map((elementLink) -> elementLink.attr("href"))
-                    .filter(UrlUtils::isUrlValid)
                     .collect(Collectors.toSet());
             newLinks.addAll(internalLinks.stream().map((elementLink) -> filteredText + elementLink.attr("href"))
-                    .filter(UrlUtils::isUrlValid)
                     .collect(Collectors.toSet()));
             driver.quit();
             kafkaProducer.sendMessage(url);

@@ -32,6 +32,7 @@ public class ProductPageRunnable implements Runnable {
     private final LinkRepository linkRepository;
 
     private static final Logger LOGGER = LogManager.getLogger(ProductPageRunnable.class);
+    private final String cdataPattern = "//<!\\[CDATA\\[\\s*(.*?)\\s*//\\]\\]>";
 
     public ProductPageRunnable(String url, KafkaProducer kafkaProducer, LinkRepository linkRepository) {
         this.url = url;
@@ -119,13 +120,39 @@ public class ProductPageRunnable implements Runnable {
         } catch (JsonSyntaxException e) {
             LOGGER.error(e);
             throw new IOException("Erro ao converter JSON", e);
+        } catch (Exception e) {
+            LOGGER.error(e);
+            System.out.println("Erro ao obter dados do link: " + url);
+            throw new IOException("Erro ao converter JSON", e);
         }
-
     }
 
     private ProductDTO getData(Document document, String url) throws IOException {
         ProductDTO product = null;
         Elements elements = document.select("script[type=application/ld+json]");
+        if (!elements.isEmpty() && elements.stream().anyMatch((element) -> element.html().matches(cdataPattern))) {
+            for (Element element : elements) {
+                if (element.html().matches(cdataPattern)) {
+                    String html = element.html().replaceAll(cdataPattern, "$1");
+                    element.html(html);
+                }
+            }
+            Element schema = elements.stream().filter((element) -> {
+                try {
+                    String json = element.html().replaceAll("\\\\\\\\\"", "");
+                    Map<?, ?> schemaMap = new GsonBuilder().setLenient().setPrettyPrinting().disableHtmlEscaping().create()
+                            .fromJson(json, Map.class);
+                    if (schemaMap.containsKey("@type") && schemaMap.get("@type").toString().equalsIgnoreCase("product")) {
+                        return true;
+                    }
+                    return schemaMap.containsKey("@graph");
+                } catch (Exception ignored) {
+                    System.out.printf("Link com application/ld+json foram dos padrões: $s%n", url);
+                    return false;
+                }
+            }).findFirst().orElse(null);
+            product = getDataFromSchema(schema);
+        }
         if (!elements.isEmpty()) {
             Element schema = elements.stream().filter((element) -> {
                 try {
@@ -217,6 +244,7 @@ public class ProductPageRunnable implements Runnable {
             }
             driver.quit();
         } catch (IOException e) {
+            System.out.println("Buscando os dados da URL: " + url);
             System.out.println("Erro: " + e.getMessage());
         }
     }

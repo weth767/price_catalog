@@ -32,7 +32,7 @@ public class SchemaNextProductDtoBuilder {
         @SuppressWarnings("unchecked")
         List<Map<?, ?>> images = (List<Map<?, ?>>) sku.get("images");
         imageUrl = images.isEmpty() ? ""
-                : images.stream().collect(Collectors.toList()).get(0).get("url").toString();
+                : images.stream().toList().get(0).get("url").toString();
         return this;
     }
 
@@ -50,8 +50,7 @@ public class SchemaNextProductDtoBuilder {
 
     public SchemaNextProductDtoBuilder brand() {
         Map<?, ?> productData = (Map<?, ?>) product.get("product");
-        String brand = (String) ((Map<?, ?>) productData.get("brand")).get("name");
-        this.brand = brand;
+        this.brand = (String) ((Map<?, ?>) productData.get("brand")).get("name");
         return this;
     }
 
@@ -61,8 +60,18 @@ public class SchemaNextProductDtoBuilder {
     }
 
     public SchemaNextProductDtoBuilder price() {
-        Map<?, ?> priceData = (Map<?, ?>) productPrice.get("sellPrice");
-        price = (String) priceData.get("priceValue").toString();
+        if (productPrice.containsKey("sellPrice") && productPrice.get("sellPrice") instanceof Map<?, ?> && ((Map<?, ?>) productPrice.get("sellPrice")).containsKey("priceValue")) {
+            price = ((Map<?, ?>) productPrice.get("sellPrice")).get("priceValue").toString();
+        }
+        if (productPrice.containsKey("sellPrice") && !(productPrice.get("sellPrice") instanceof Map<?, ?>)) {
+            price = productPrice.get("sellPrice").toString();
+        }
+        if (productPrice.containsKey("price") && productPrice.get("price") instanceof Map<?, ?> && ((Map) productPrice.get("price")).containsKey("priceValue")) {
+            price = ((Map<?, ?>) productPrice.get("price")).get("priceValue").toString();
+        }
+        if (productPrice.containsKey("price")) {
+            price = productPrice.get("price").toString();
+        }
         return this;
     }
 
