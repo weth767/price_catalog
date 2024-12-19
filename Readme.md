@@ -40,6 +40,10 @@
 8º - Consumer service
 ```
 
+## To run in correct order, you can run this make command
+
+`make run_all`
+
 ### In case if is necessary use VSCode launch, follow down files descriptions
 
 ### [launch.json]
